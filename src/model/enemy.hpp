@@ -2,16 +2,16 @@
 
 class Enemy{
 	private:
-		int pos_x;
-		int pos_y;
+		float pos_x;
+		float pos_y;
 		float speed;
 	public:
-		Enemy(int pos_x, int pos_y, float speed);
+		Enemy(float pos_x, float pos_y, float speed);
 
-		int get_pos_x();
-		int get_pos_y();
+		float get_pos_x();
+		float get_pos_y();
 		float get_speed();
 
-		void move(int delta_x, int delta_y);
+		void move(float delta_x, float delta_y);
 };
 

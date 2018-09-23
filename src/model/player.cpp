@@ -1,15 +1,15 @@
 #include "player.hpp"
 
-int Player::get_pos_x(){
-	return self.pos_x;
+float Player::get_pos_x(){
+	return this->pos_x;
 }
 
-int Player::get_pos_y(){
-	return self.pos_y;
+float Player::get_pos_y(){
+	return this->pos_y;
 }
 
-void Player::move(int delta_x, int delta_y){
-	self.pos_x += delta_x;
-	self.pos_y += delta_y;
+void Player::move(float delta_x, float delta_y){
+	this->pos_x += delta_x;
+	this->pos_y += delta_y;
 }
 

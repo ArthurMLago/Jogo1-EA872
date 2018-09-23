@@ -7,7 +7,7 @@ int main(){
 
 
 	while(1){
-		controller.update();
+		controller->update();
 
 	}
 

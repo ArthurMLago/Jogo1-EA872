@@ -1,4 +1,4 @@
-#include "GameController.hpp"
+#include "gameController.hpp"
 
 void GameController::update(){
 	// cria mais bolas

@@ -3,6 +3,8 @@
 #include "../model/scene.hpp"
 #include "../view/viewController.hpp"
 
+class ViewController;
+
 class GameController {
 	private:
 		Scene *currentScene;

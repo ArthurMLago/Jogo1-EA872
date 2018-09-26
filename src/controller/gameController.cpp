@@ -33,7 +33,7 @@ void GameController::update(){
 				&&(currentScene->enemyList[i]->get_pos_y() <= currentScene->player->get_pos_y()+0.5
 					&&currentScene->enemyList[i]->get_pos_y() >= currentScene->player->get_pos_y()-0.5)){
 				// Fim do jogo
-				viewController->showGameOverScene();
+				viewController->showGameOverScreen();
 				// condicao para parar o loop
 				i = currentScene->enemyList.size();
 		}

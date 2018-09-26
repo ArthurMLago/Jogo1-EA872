@@ -16,6 +16,8 @@ class ViewController{
 		Audio::Sample *collideSample;
 		Audio::Sample *gameOverSample;
 
+		Audio::Player player;
+
 		GameController *gameController;
 		Scene *currentScene;
 

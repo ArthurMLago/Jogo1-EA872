@@ -10,6 +10,8 @@ class Scene {
 		std::vector<Enemy*> enemyList;
 		Player *player;
 
+		~Scene();
+
 		
 
 };

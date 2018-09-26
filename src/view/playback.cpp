@@ -5,6 +5,7 @@
 #include <sstream>
 #include <string>
 #include <random>
+#include "sndfile.h"
 
 #include "playback.hpp"
 

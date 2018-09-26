@@ -12,11 +12,21 @@ int main(){
 	currentScene.enemyList.push_back(newEnemy);
 
 	viewController.setScene(&currentScene);
+	viewController.setGameController(&gameController);
 
+	gameController.setViewController(&viewController);
+	gameController.setScene(&currentScene);
+
+	//while(!gameController.shouldTerminate()){
+	int blob = 0;
 	while(1){
 		gameController.update();
 		viewController.drawScene();
 		std::this_thread::sleep_for(std::chrono::milliseconds(30));
+		blob++;
+		if(blob == 30){
+			viewController.showGameOverScreen();
+		}
 	}
 
 

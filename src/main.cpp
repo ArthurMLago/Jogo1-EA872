@@ -18,15 +18,10 @@ int main(){
 	gameController.setScene(&currentScene);
 
 	//while(!gameController.shouldTerminate()){
-	int blob = 0;
 	while(1){
 		gameController.update();
 		viewController.drawScene();
 		std::this_thread::sleep_for(std::chrono::milliseconds(30));
-		blob++;
-		if(blob == 30){
-			viewController.showGameOverScreen();
-		}
 	}
 
 

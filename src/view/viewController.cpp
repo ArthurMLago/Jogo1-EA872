@@ -87,10 +87,9 @@ void ViewController::input_thread_routine(){
 		c = getch();
 		if (c != ERR){
 			if (c == 'w'){
-				//gameController->userPressedUp();
-				printf("bobobobob\n");
+				gameController->userPressedUp();
 			}else if(c == 's'){
-				//gameController->userPressedDown();
+				gameController->userPressedDown();
 			}else if(c == 'q'){
 				//showGameOverScreen();
 				//gameController->terminateGame();

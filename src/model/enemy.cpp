@@ -12,7 +12,7 @@ float Enemy::get_pos_x(){
 }
 
 float Enemy::get_pos_y(){
-	return this->pos_x;
+	return this->pos_y;
 }
 
 float Enemy::get_speed(){

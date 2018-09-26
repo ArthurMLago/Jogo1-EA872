@@ -52,7 +52,6 @@ void GameController::setViewController(ViewController *pointer){
 *Essa funcão atualiza a propriedade Setscene para o ponteiro passado.
 */
 void GameController::setScene(Scene *pointer){
-
 	currentScene = pointer;
 }
 

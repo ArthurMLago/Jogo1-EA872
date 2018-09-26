@@ -45,9 +45,6 @@ void GameController::update(){
 *Essa funcão atualiza a propriedade viewController para o ponteiro passado.
 */
 void GameController::setViewController(ViewController *pointer){
-	int larg;
-	int alt;
-	viewController->getScreenDimension(&larg, &alt);
 	viewController = pointer;
 }
 
@@ -55,9 +52,6 @@ void GameController::setViewController(ViewController *pointer){
 *Essa funcão atualiza a propriedade Setscene para o ponteiro passado.
 */
 void GameController::setScene(Scene *pointer){
-	int larg;
-	int alt;
-	viewController->getScreenDimension(&larg, &alt);
 	currentScene = pointer;
 }
 

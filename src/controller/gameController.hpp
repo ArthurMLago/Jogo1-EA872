@@ -3,6 +3,10 @@
 #include "../model/scene.hpp"
 #include "../view/viewController.hpp"
 
+// Resolver depenencia circular:
+class Scene;
+class ViewController;
+
 class GameController {
 	private:
 		Scene *currentScene;

@@ -1,5 +1,11 @@
 #include "player.hpp"
 
+Player::Player(float pos_x,int pos_y){
+	this->pos_x = pos_x;
+	this->pos_y = pos_y;
+
+}
+
 float Player::get_pos_x(){
 	return this->pos_x;
 }

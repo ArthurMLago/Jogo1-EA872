@@ -24,6 +24,8 @@ ViewController::~ViewController(){
 	delete moveSample;
 	delete collideSample;
 	delete gameOverSample;
+
+	endwin();
 }
 
 void ViewController::setGameController(GameController *gameController){
@@ -65,16 +67,18 @@ void ViewController::showGameOverScreen(){
 
 void ViewController::drawScene(){
 	// Limpa tela:
-	clear();
+	erase();
 	// Desenha inigos:
 	for (int i = 0; i < currentScene->enemyList.size(); i++){
 		int x = currentScene->enemyList[i]->get_pos_x();
 		int y = currentScene->enemyList[i]->get_pos_y();
 
+
+		fprintf(stderr, "\t%f, %f\n",currentScene->enemyList[i]->get_pos_x(),currentScene->enemyList[i]->get_pos_y() );
 		move(y,x);
 		echochar('*');
 	}
-	move(currentScene->player->get_pos_x(), currentScene->player->get_pos_y());
+	move(currentScene->player->get_pos_y(), currentScene->player->get_pos_x());
 	echochar('P');
 
 	refresh();
@@ -83,7 +87,7 @@ void ViewController::drawScene(){
 
 void ViewController::input_thread_routine(){
 	char c;
-	while(control == 0){
+	while((gameController == NULL) || (!gameController->shouldTerminate())){
 		c = getch();
 		if (c != ERR){
 			if (c == 'w'){
@@ -91,8 +95,7 @@ void ViewController::input_thread_routine(){
 			}else if(c == 's'){
 				gameController->userPressedDown();
 			}else if(c == 'q'){
-				//showGameOverScreen();
-				//gameController->terminateGame();
+				gameController->terminate();
 			}
 		}
 		std::this_thread::sleep_for(std::chrono::milliseconds(16));

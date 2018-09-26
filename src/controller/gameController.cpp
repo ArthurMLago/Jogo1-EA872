@@ -83,15 +83,12 @@ void GameController::userPressedDown(){
 /* 
 *Funcao que troca o valor da variavel shouldterminate
 */
-void terminate(){
-	if(shouldTerminate == 0){
-		shouldTerminate = 1;
-	}else 
-		shouldTerminate = 0;
+void GameController::terminate(){
+	shouldTerminate_var = 1;
 }
 /* 
 *Funcao que da o retorno do valor de shouldTerminate
 */
-int shouldTerminate(){
-	return shouldTerminate;
+int GameController::shouldTerminate(){
+	return shouldTerminate_var;
 }

@@ -80,4 +80,18 @@ void GameController::userPressedDown(){
 	currentScene->player->move(0.0, -1.0);
 	viewController->playMoveSound();
 }
-
+/* 
+*Funcao que troca o valor da variavel shouldterminate
+*/
+void terminate(){
+	if(shouldTerminate == 0){
+		shouldTerminate = 1;
+	}else 
+		shouldTerminate = 0;
+}
+/* 
+*Funcao que da o retorno do valor de shouldTerminate
+*/
+int shouldTerminate(){
+	return shouldTerminate;
+}

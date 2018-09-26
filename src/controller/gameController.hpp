@@ -10,7 +10,7 @@ class GameController {
 		Scene *currentScene;
 		ViewController *viewController;
 		int tempo = 0; //variável global que conta o tempo começa em 0
-		 int shouldTerminate = 0; // jogo deve acabar
+		int shouldTerminate = 0; // jogo deve acabar
 
 	public:
 		void setViewController(ViewController *pointer);

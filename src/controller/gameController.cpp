@@ -44,7 +44,7 @@ void GameController::update(){
 	for(int i = 0; i < currentScene->enemyList.size();i++){
 		if((currentScene->enemyList[i]->get_pos_x() > larg) || (currentScene->enemyList[i]->get_pos_y() > alt)){
 			delete currentScene->enemyList[i];
-			currentScene->enemyList.erase(i);
+			currentScene->enemyList.erase(currentScene->enemyList.begin() + i);
 		}
 	}
 	tempo++;

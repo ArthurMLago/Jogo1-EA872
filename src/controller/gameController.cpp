@@ -38,6 +38,14 @@ void GameController::update(){
 				i = currentScene->enemyList.size();
 		}
 	}
+	// Loop que verifica se os inimigos estao fora da tela
+	// Vale uma critica ao delete pois este deveria estar encapsulado em funcoes apropriadas dentro da classe Scene
+	for(int i = 0; i < currentScene->enemyList.size();i++){
+		if((currentScene->enemyList[i]->get_pos_x() > larg) || (currentScene->enemyList[i]->get_pos_y() > alt)){
+			delete currentScene->enemyList[i];
+			currentScene->enemyList.erase(i);
+		}
+	}
 	tempo++;
 }
 

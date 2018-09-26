@@ -5,10 +5,11 @@
 *Deve cuidar das funcoes basicas do jogo, como criar mais inimigos bolas, fazer os inimigos se movimentarem,
 *verificar colisoes, etc
 */
-int larg;
-int alt;
-viewController->getScreenDimension(&larg, &alt);
+
 void GameController::update(){
+	int larg;
+	int alt;
+	viewController->getScreenDimension(&larg, &alt);
 	float val = alt*((float)(rand())/RAND_MAX);
 	// a cada 2 segundos entra no if 
 	if(tempo%120 == 0){

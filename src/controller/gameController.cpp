@@ -13,7 +13,7 @@ void GameController::update(){
 	// a cada 2 segundos entra no if 
 	if(tempo%120 == 0){
 		// cria mais bolas
-		currentScene->Enemy* novo_enemy = new Enemy(0.0; val,get_speed());
+		currentScene->Enemy* novo_enemy = new Enemy(0.0; val,get_speed()+(rand())/1.0);
 		currentScene->enemyList.push_back(novo_enemy);
 	}
 

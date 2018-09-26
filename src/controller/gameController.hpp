@@ -20,6 +20,7 @@ class GameController {
 		void userPressedDown();
 		void terminate() 
 		int shouldTerminate();
+	
 };
 
 

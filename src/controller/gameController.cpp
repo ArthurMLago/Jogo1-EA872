@@ -32,8 +32,8 @@ void GameController::update(){
 			&&currentScene->enemyList[i]->get_pos_x() >= currentScene->player->get_pos_x()-0.5) 
 				&&(currentScene->enemyList[i]->get_pos_y() <= currentScene->player->get_pos_y()+0.5
 					&&currentScene->enemyList[i]->get_pos_y() >= currentScene->player->get_pos_y()-0.5)){
-				// Flag da colisao muda
-				colisao= 1;
+				// Fim do jogo
+				viewController->showGameOverScene();
 				// condicao para parar o loop
 				i = currentScene->enemyList.size();
 		}

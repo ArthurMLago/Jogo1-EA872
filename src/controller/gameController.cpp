@@ -45,6 +45,9 @@ void GameController::update(){
 *Essa funcão atualiza a propriedade viewController para o ponteiro passado.
 */
 void GameController::setViewController(ViewController *pointer){
+	int larg;
+	int alt;
+	viewController->getScreenDimension(&larg, &alt);
 	viewController = pointer;
 }
 
@@ -52,6 +55,9 @@ void GameController::setViewController(ViewController *pointer){
 *Essa funcão atualiza a propriedade Setscene para o ponteiro passado.
 */
 void GameController::setScene(Scene *pointer){
+	int larg;
+	int alt;
+	viewController->getScreenDimension(&larg, &alt);
 	currentScene = pointer;
 }
 
@@ -60,6 +66,9 @@ void GameController::setScene(Scene *pointer){
 *ir para cima e a posição do jogador deve ser atualizada no model
 */
 void GameController::userPressedUp(){
+	int larg;
+	int alt;
+	viewController->getScreenDimension(&larg, &alt);
 	currentScene->player->move(0.0, 1.0);
 
 }
@@ -69,6 +78,9 @@ void GameController::userPressedUp(){
 *ir para baixo e a posição do jogador deve ser atualizada no model
 */
 void GameController::userPressedDown(){
+	int larg;
+	int alt;
+	viewController->getScreenDimension(&larg, &alt);
 	currentScene->player->move(0.0, -1.0);
 }
 

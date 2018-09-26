@@ -70,6 +70,7 @@ void GameController::userPressedUp(){
 	int alt;
 	viewController->getScreenDimension(&larg, &alt);
 	currentScene->player->move(0.0, 1.0);
+	viewController->playMoveSound();
 
 }
 
@@ -82,5 +83,6 @@ void GameController::userPressedDown(){
 	int alt;
 	viewController->getScreenDimension(&larg, &alt);
 	currentScene->player->move(0.0, -1.0);
+	viewController->playMoveSound();
 }
 

@@ -49,7 +49,7 @@ void ViewController::playCollisionSound(){
 }
 
 void ViewController::playMoveSound(){
-	moveSample->set_position(0);
+	moveSample->position = 0;
 	player.play(moveSample);
 
 }

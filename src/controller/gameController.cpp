@@ -11,11 +11,10 @@ void GameController::update(){
 	int alt;
 	viewController->getScreenDimension(&larg, &alt);
 	float val = alt*((float)(rand())/RAND_MAX);
-	fprintf(stderr, "%f\n", val);
 	// a cada 2 segundos entra no if 
 	if(tempo%20 == 0){
 		// cria mais bolas
-		Enemy* novo_enemy = new Enemy(0.0, val,1);
+		Enemy* novo_enemy = new Enemy(0.5, val,1);
 		currentScene->enemyList.push_back(novo_enemy);
 	}
 

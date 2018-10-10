@@ -4,6 +4,12 @@
 #include <thread>
 #include <ncurses.h>
 
+#include <unistd.h>
+#include <sys/types.h>
+#include <sys/socket.h>
+#include <netinet/in.h>
+#include <arpa/inet.h>
+
 #include "playback.hpp"
 #include "../model/scene.hpp"
 #include "../controller/gameController.hpp"

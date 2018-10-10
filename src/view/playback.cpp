@@ -70,6 +70,9 @@ std::vector<float> Sample::get_data() {
 Player::Player() {
 	this->playing = false;
 	this->audio_sample = NULL;
+
+	this->init();
+	fprintf(stderr, "vervmeoirviervoieorjver\n");
 }
 
 void Player::pause() {

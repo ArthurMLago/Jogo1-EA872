@@ -3,10 +3,13 @@
 //int ViewController::control = 0;
 
 ViewController::ViewController(){
+	this->state = 1;
 	// Criar samples de audio:
 	moveSample = new Audio::Sample("assets/move.dat");
 	collideSample = new Audio::Sample("assets/collide.dat");
 	gameOverSample = new Audio::Sample("assets/gameOver.dat");
+	
+	player = new Audio::Player();
 
 	// Inicar ncurses:
 	initscr();
@@ -19,11 +22,34 @@ ViewController::ViewController(){
 
 	control = 0;
 }
+ViewController::ViewController(int state){
+	this->state = state;
+
+	// Inicar ncurses:
+	initscr();
+	raw();
+	curs_set(0);
+	getmaxyx(stdscr, this->screenH, this->screenW);
+	
+	player = NULL;
+	if (state != 0){
+		player = new Audio::Player();
+		// Criar samples de audio:
+		moveSample = new Audio::Sample("assets/move.dat");
+		collideSample = new Audio::Sample("assets/collide.dat");
+		gameOverSample = new Audio::Sample("assets/gameOver.dat");
+		// Criar thread que escuta por comandos:
+		inputThread = new std::thread(&ViewController::input_thread_routine, this);
+	}
+
+	control = 0;
+}
 
 ViewController::~ViewController(){
-	inputThread->join();
-	delete inputThread;
-
+	if (state){
+		inputThread->join();
+		delete inputThread;
+	}
 	delete moveSample;
 	delete collideSample;
 	delete gameOverSample;
@@ -50,7 +76,9 @@ void ViewController::playCollisionSound(){
 
 void ViewController::playMoveSound(){
 	moveSample->position = 0;
-	player.play(moveSample);
+	
+	if (player)
+		player->play(moveSample);
 
 }
 

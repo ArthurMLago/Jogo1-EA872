@@ -1,5 +1,8 @@
-all: build build/game
+all: build build/game build/remoteViewer
 	#./build/game
+
+build/remoteViewer: build/enemy.o build/player.o build/scene.o build/gameController.o build/viewController.o build/playback.o src/remoteViewer.cpp
+	g++ -g3 -O0 src/remoteViewer.cpp build/scene.o build/viewController.o -o build/remoteViewer build/gameController.o build/playback.o build/player.o build/enemy.o libsndfile.a -lncurses -lpthread -lportaudio
 
 build/game: build/enemy.o build/player.o build/scene.o build/gameController.o build/viewController.o build/playback.o src/main.cpp
 	g++ -g3 -O0 build/enemy.o build/player.o build/scene.o build/gameController.o build/viewController.o build/playback.o src/main.cpp -o build/game libsndfile.a -lportaudio -lncurses -lpthread

@@ -22,7 +22,7 @@ class ViewController{
 		Audio::Sample *collideSample;
 		Audio::Sample *gameOverSample;
 
-		Audio::Player player;
+		Audio::Player *player;
 
 		GameController *gameController;
 		Scene *currentScene;
@@ -32,9 +32,11 @@ class ViewController{
 		int screenW, screenH;
 		char keyBuffer;
 		int control;
+		int state;
 
 	public:
 		ViewController();
+		ViewController(int state);
 		~ViewController();
 		
 		void setGameController(GameController *gameController);

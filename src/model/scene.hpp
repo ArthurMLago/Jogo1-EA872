@@ -1,5 +1,7 @@
 #pragma once
 
+#include <stdlib.h>
+#include <string.h>
 #include <vector>
 
 #include "../model/player.hpp"
@@ -11,6 +13,8 @@ class Scene {
 		Player *player;
 
 		~Scene();
+		unsigned char *serialize(int *n_bytes);
+		void unserialize(unsigned char *buffer);
 
 		
 

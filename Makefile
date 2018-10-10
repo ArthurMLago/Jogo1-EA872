@@ -1,5 +1,8 @@
-all: build build/game build/remoteViewer
+all: build build/game build/remoteViewer build/remoteKeyboard
 	#./build/game
+
+build/remoteKeyboard: src/remoteKeyboard.c
+	gcc src/remoteKeyboard.c -o build/remoteKeyboard -lncurses
 
 build/remoteViewer: build/enemy.o build/player.o build/scene.o build/gameController.o build/viewController.o build/playback.o src/remoteViewer.cpp
 	g++ -g3 -O0 src/remoteViewer.cpp build/scene.o build/viewController.o -o build/remoteViewer build/gameController.o build/playback.o build/player.o build/enemy.o libsndfile.a -lncurses -lpthread -lportaudio

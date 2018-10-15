@@ -49,9 +49,6 @@ Sample::Sample(const char *filename){
 
 	sf_close(infile);
 
-	this->position = 0;
-
-
 }
 
 Sample::~Sample(){
@@ -65,13 +62,6 @@ unsigned long int Sample::get_n_frames(){
 int Sample::get_n_channels(){
 	return n_channels;
 }
-
-bool Sample::finished(){
-	if (this->position >= this->n_frames)
-		return true;
-	return false;
-}
-
 
 
 Player::Player() {
@@ -110,25 +100,59 @@ Player::Player() {
 		return;
 	}
 
-	err = Pa_StartStream( stream );
-	if( err != paNoError ) {
-		std::cerr << "Error on Pa_StartStream()" << std::endl;
-		return;
-	}
+    // Initialize linked list:
+    queue = NULL;
+    queue_last_next = &queue;
+
 
 
 }
 
 Player::~Player() {
-	stop();
+	pause();
+
+	err = Pa_CloseStream( stream );
+	if( err != paNoError ) {
+		std::cerr << "Error on Pa_StopStream()" << std::endl;
+		return;
+	}
+
+	Pa_Terminate();
 }
 
-void Player::play(Sample *audiosample){
-	this->audio_sample = audiosample;
+int Player::play(Sample *audiosample, float *intensities){
+    
+    //int index = -1;
+    //for (int i = 0; i < MAX_SAMPLES && index == -1; i++){
+        //if (!sample_vector[i].samplePointer){
+            //sample_vector[i].samplePointer = audiosample;
+            //sample_vector[i].pos = 0;
+            //memcpy(sample_vector[i].intensities, intensities, N_CHANNELS * sizeof(float));
+            //sample_vector[i].flags = 0;
+            //index = i;
+        //}
+    //}
+    struct sample_queue * = (struct sample_queue*)malloc(sizeof(struct sample_queue))
+
+
+    if (!playing){
+        err = Pa_StartStream( stream );
+        if( err != paNoError ) {
+            std::cerr << "Error on Pa_StartStream()" << std::endl;
+            return;
+        }
+        this->playing = true;
+    }
 }
 
 void Player::pause() {
-  this->playing = false;
+    err = Pa_StopStream( stream );
+    if( err != paNoError ){
+        std::cerr << "Error on Pa_StopStream()" << std::endl;
+        return;
+    }
+
+    this->playing = false;
 }
 
 void Player::stop() {
@@ -138,14 +162,12 @@ void Player::stop() {
 		std::cerr << "Error on Pa_StopStream()" << std::endl;
 		return;
 	}
+    this->playing = false;
 
-	err = Pa_CloseStream( stream );
-	if( err != paNoError ) {
-		std::cerr << "Error on Pa_StopStream()" << std::endl;
-		return;
-	}
+    for (int i = 0; i < MAX_SAMPLES; i++){
+        sample_vector[i].samplePointer = NULL;
+    }
 
-	Pa_Terminate();
 
 }
 
@@ -163,8 +185,8 @@ int Player::PA_Callback (const void *inputBuffer, void *outputBuffer,
 
 	Player *player = (Player*) userData;
 	float *buffer = (float *) outputBuffer;
-	Sample *s = player->get_data();
 
+    struct sample_queue* queue = 
 	if (s != NULL){
 		unsigned long int pos = s->position;
 		int i = 0;

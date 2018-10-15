@@ -1,6 +1,7 @@
 #pragma once
 
 #define N_CHANNELS 2
+#define MAX_SAMPLES 10
 
 #include <iostream>
 
@@ -18,7 +19,6 @@ namespace Audio{
 
 		public:
 			float *data;
-			unsigned long int position;
 
 			Sample(const char *filename);
 			~Sample();
@@ -26,14 +26,11 @@ namespace Audio{
 			unsigned long int get_n_frames();
 			int get_n_channels();
 
-			bool finished();
-
 	};
 
 
 	class Player {
 		private:
-			Sample *audio_sample;
 			bool playing;
 
 			PaStreamParameters  outputParameters;
@@ -41,21 +38,38 @@ namespace Audio{
 			PaError             err;
 			PaTime              streamOpened;
 
+            struct {
+                Sample *samplePointer;
+                unsigned long int pos;
+                float intensities[N_CHANNELS];
+                unsigned int flags;
+                struct sample_queue *next;
+            } sample_queue;
+            struct sample_queue *queue;
+            struct sample_queue **queue_last_next;
+
 
 		public:
+            // Default constructor and destructors:
 			Player();
 			~Player();
 
+            // Callback function for portaudio, should not be called by user:
 			static int PA_Callback (const void *inputBuffer, void *outputBuffer,
 							 unsigned long framesPerBuffer,
 							 const PaStreamCallbackTimeInfo* timeInfo,
 							 PaStreamCallbackFlags statusFlags,
 							 void *userData );
 
-			void init();
+
 			void pause();
+            void resume();
 			void stop();
-			void play(Sample *audiosample);
-			Sample *get_data();
+            // Play a sample, receives sample pointer and intensities vector of length N_CHANNELS for each channel intensity
+			int play(Sample *audiosample, float *intensities);
+            // Blocks until all samples finish playing:
+            void block();
+            // Block until a specified sample is finished. Receives index, which identifies which sample to wait for, obtained from play()
+            void block(int index);
 	};
 }

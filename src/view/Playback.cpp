@@ -2,7 +2,7 @@
 
 using namespace Audio;
 
-Sample::Sample(char *filename){
+Sample::Sample(const char *filename){
 	SNDFILE * infile;
 	SF_INFO sfinfo;
 

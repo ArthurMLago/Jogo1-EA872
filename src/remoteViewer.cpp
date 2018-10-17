@@ -12,7 +12,7 @@ int main(){
 	Scene currentScene;
 	currentScene.player = new Player(0,0);
 	viewController.setScene(&currentScene);
-	//std::thread ttthread(closer);
+	std::thread ttthread(closer);
 	
 
 	int socket_fd;
@@ -25,7 +25,7 @@ int main(){
 	target.sin_port = htons(18258);
 	inet_aton("127.0.0.1", &(target.sin_addr));
 	printf("Tentando conectar\n");
-	while(connect(socket_fd, (struct sockaddr*)&target, sizeof(target)) != 0) {
+	while(connect(socket_fd, (struct sockaddr*)&target, sizeof(target)) != 0 && !finish) {
 		printf("Problemas na conexao\n");
 		sleep(1);
 		/*endwin();*/
@@ -48,6 +48,7 @@ int main(){
 			//break;
 		viewController.drawScene();
 	}
+	ttthread.join();
 	endwin();
 
 }
@@ -55,7 +56,7 @@ int main(){
 void closer(){
 	char c;
 	while(1){
-		   c = getch();
+	   c = getch();
 		if (c == 'q'){
 			finish = 1;
 			break;

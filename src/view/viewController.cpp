@@ -49,10 +49,11 @@ ViewController::~ViewController(){
 	if (state){
 		inputThread->join();
 		delete inputThread;
+	
+		delete moveSample;
+		delete collideSample;
+		delete gameOverSample;
 	}
-	delete moveSample;
-	delete collideSample;
-	delete gameOverSample;
 
 	endwin();
 }

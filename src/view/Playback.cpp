@@ -12,6 +12,11 @@ Sample::Sample(char *filename){
 		printf ("Not able to open input file %s.\n", filename) ;
 		/* Print the error message from libsndfile. */
 		puts (sf_strerror (NULL)) ;
+
+		n_channels = 0;
+		n_frames = 0;
+		data = NULL;
+		return;
 	}
 
 	n_frames = sfinfo.frames;
@@ -55,7 +60,8 @@ Sample::Sample(char *filename){
 }
 
 Sample::~Sample(){
-	free(data);
+	if (data != NULL)
+		free(data);
 }
 
 unsigned long int Sample::get_n_frames(){

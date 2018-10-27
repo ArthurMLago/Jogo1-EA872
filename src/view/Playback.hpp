@@ -38,18 +38,20 @@ namespace Audio{
 			PaError             err;
 			PaTime              streamOpened;
 
-            struct {
+            struct play_element {
                 Sample *samplePointer;
                 unsigned long int pos;
                 float intensities[N_CHANNELS];
                 unsigned int flags;
                 struct sample_queue *next;
-            } sample_queue;
-            struct sample_queue *queue;
-            struct sample_queue **queue_last_next;
+            };
+
+
 
 
 		public:
+			struct play_element sample_vector[MAX_SAMPLES];//FIXME should not be public
+
             // Default constructor and destructors:
 			Player();
 			~Player();

@@ -36,11 +36,13 @@ int main(){
 		unsigned char buffer[4096];
 		int received = recv(socket_fd, buffer, 4, 0);
 		if (received != 4){
+			finish = 1;
 			break;
 		}
 		int n_enemies = ((int*)buffer)[0];
 		received = recv(socket_fd, buffer + 4, n_enemies * sizeof(Enemy) + sizeof(Player), 0);
 		if (received != n_enemies * sizeof(Enemy) + sizeof(Player)){
+			finish = 1;
 			break;
 		}
 		currentScene.unserialize(buffer);
@@ -55,7 +57,8 @@ int main(){
 
 void closer(){
 	char c;
-	while(1){
+	timeout(200);
+	while(!finish){
 	   c = getch();
 		if (c == 'q'){
 			finish = 1;

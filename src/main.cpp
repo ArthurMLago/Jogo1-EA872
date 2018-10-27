@@ -1,4 +1,5 @@
-
+#include <unistd.h>
+#include <fcntl.h>
 #include <thread>
 #include "controller/gameController.hpp"
 
@@ -63,6 +64,7 @@ void remoteUpdater(){
 		fprintf(stderr, "Problemas ao abrir porta 18258\n");
 		sleep(1);
 	}
+	fcntl(socket_fd, F_SETFL, O_NONBLOCK);
 	fprintf(stderr, "Abri porta 3001!\n");
 
 	listen(socket_fd, 2);
@@ -71,17 +73,20 @@ void remoteUpdater(){
 	while(!gController->shouldTerminate()){
 		fprintf(stderr, "Vou travar ate receber alguma coisa\n");
 		connection_fd = accept(socket_fd, (struct sockaddr*)&client, &client_size);
+		sleep(1);
 
-		printf("fez algo\n");
-		int closed = 0;
-		while(!gController->shouldTerminate() && !closed){
-			int expected;
-			unsigned char *pointer;
-			pointer = globalScene->serialize(&expected);
-			int sent = send(connection_fd, pointer, expected, 0);
-			if (sent != expected)
-				closed = 1;
-			std::this_thread::sleep_for(std::chrono::milliseconds(100));
+		if (connection_fd != -1){
+
+			int closed = 0;
+			while(!gController->shouldTerminate() && !closed){
+				int expected;
+				unsigned char *pointer;
+				pointer = globalScene->serialize(&expected);
+				int sent = send(connection_fd, pointer, expected, 0);
+				if (sent != expected)
+					closed = 1;
+				std::this_thread::sleep_for(std::chrono::milliseconds(100));
+			}
 		}
 
 

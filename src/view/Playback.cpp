@@ -206,42 +206,9 @@ int Player::PA_Callback (const void *inputBuffer, void *outputBuffer,
 		}
 	}
 	if (!somethingPlaying){
-		//player->pause();
+		//player->playing = false;
+		//return paComplete;
 	}
-
-    //struct sample_queue* it = this->queue;
-	//while(it != NULL){
-		//for (int i = it->pos; i < it->samplePointer->get_n_frames() && i < framesPerBuffer; i++){
-			//for (int j = 0; i j < N_CHANNELS; j++){
-				//buffer[i - it->pos * N_CHANNELS + j] = it->samplePointer->data[i * N_CHANNELS + j]
-			//}
-		//}
-		//it->pos = i;
-		//if (it->pos >= it->samplePointer->get_n_frames()){
-			
-		//}
-		//it = it->next;
-	//}
-	//if (s != NULL){
-		//unsigned long int pos = s->position;
-		//int i = 0;
-		//while(i/N_CHANNELS < framesPerBuffer){
-			//if (pos < s->get_n_frames()){
-				//for (int j = 0; j < N_CHANNELS; j++){
-					//buffer[i++] = s->data[pos*N_CHANNELS + j] ;
-				//}
-				//pos++;
-			//}else{
-				//for (int j = 0; j < N_CHANNELS; j++){
-					//buffer[i++] = 0;
-				//}
-			//}
-
-		//}
-		//s->position = pos;
-	//}else{
-		//memset(buffer, 0, framesPerBuffer * sizeof(float) * N_CHANNELS);
-	//}
 	return 0;
 
 }

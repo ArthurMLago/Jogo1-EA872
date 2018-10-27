@@ -14,7 +14,7 @@ void GameController::update(){
 	// a cada 2 segundos entra no if 
 	if(tempo%20 == 0){
 		// cria mais bolas
-		Enemy* novo_enemy = new Enemy(0.5, val,1);
+		Enemy* novo_enemy = new Enemy(0.5, val,((float)(rand())/RAND_MAX));
 		currentScene->enemyList.push_back(novo_enemy);
 	}
 
@@ -22,7 +22,7 @@ void GameController::update(){
 	if(tempo%10 == 0){
 		// move as bolas que ja existem
 		for(int i = 0; i<currentScene->enemyList.size();i++){
-			currentScene->enemyList[i]->move(1.0, 0.0);
+			currentScene->enemyList[i]->move(currentScene->enemyList[i]->get_speed() * 3, 0.0);
 		}
 	}
 	// loop que verificar se ocorreu alguma colisa
@@ -34,6 +34,7 @@ void GameController::update(){
 					&&currentScene->enemyList[i]->get_pos_y() >= currentScene->player->get_pos_y()-0.5)){
 				// Fim do jogo
 				viewController->showGameOverScreen();
+				//viewController->playCollisionSound();
 				// condicao para parar o loop
 				i = currentScene->enemyList.size();
 		}

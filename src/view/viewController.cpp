@@ -5,9 +5,9 @@
 ViewController::ViewController(){
 	this->state = 1;
 	// Criar samples de audio:
-	moveSample = new Audio::Sample("assets/move.dat");
-	collideSample = new Audio::Sample("assets/collide.dat");
-	gameOverSample = new Audio::Sample("assets/gameOver.dat");
+	moveSample = new Audio::Sample("assets/move.wav");
+	collideSample = new Audio::Sample("assets/collide.wav");
+	gameOverSample = new Audio::Sample("assets/gameOver.wav");
 	
 	player = new Audio::Player();
 
@@ -76,10 +76,10 @@ void ViewController::playCollisionSound(){
 }
 
 void ViewController::playMoveSound(){
-	moveSample->position = 0;
-	
+	//moveSample->position = 0;
+	float intensities[2] = {1.0,1.0};
 	if (player)
-		player->play(moveSample);
+		player->play(moveSample, intensities);
 
 }
 
@@ -93,6 +93,10 @@ void ViewController::showGameOverScreen(){
 	move(screenH/2 + 1, screenW/2 - 20);
 	addstr("########################################");
 	refresh();
+	if (player){
+		float intensities[2] = {0.0,1.0};
+		player->play(gameOverSample, intensities);
+	}
 
 	std::this_thread::sleep_for(std::chrono::seconds(5));
 }

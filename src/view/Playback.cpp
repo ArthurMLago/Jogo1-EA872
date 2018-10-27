@@ -54,9 +54,6 @@ Sample::Sample(const char *filename){
 
 	sf_close(infile);
 
-	this->position = 0;
-
-
 }
 
 Sample::~Sample(){
@@ -72,17 +69,9 @@ int Sample::get_n_channels(){
 	return n_channels;
 }
 
-bool Sample::finished(){
-	if (this->position >= this->n_frames)
-		return true;
-	return false;
-}
-
-
 
 Player::Player() {
 	this->playing = false;
-	this->audio_sample = NULL;
 
 	PaError err;
 
@@ -105,8 +94,8 @@ Player::Player() {
 	err = Pa_OpenStream( &stream,
 						 NULL,    //  [> No input. <]
 						 &outputParameters,
-						 44100,
-						 64,      // [> Frames per buffer. <]
+						 46000,
+						 256,      // [> Frames per buffer. <]
 						 paClipOff,// [> We won't output out of range samples so don't bother clipping them. <]
 						 &Player::PA_Callback,
 						 this );
@@ -116,25 +105,60 @@ Player::Player() {
 		return;
 	}
 
-	err = Pa_StartStream( stream );
-	if( err != paNoError ) {
-		std::cerr << "Error on Pa_StartStream()" << std::endl;
-		return;
+	for (int i = 0; i < MAX_SAMPLES; i++){
+		sample_vector[i].samplePointer = NULL;
 	}
 
 
 }
 
 Player::~Player() {
-	stop();
+	pause();
+
+	err = Pa_CloseStream( stream );
+	if( err != paNoError ) {
+		std::cerr << "Error on Pa_StopStream()" << std::endl;
+		return;
+	}
+
+	Pa_Terminate();
 }
 
-void Player::play(Sample *audiosample){
-	this->audio_sample = audiosample;
+int Player::play(Sample *audiosample, float *intensities){
+    
+	int index = -1;
+	for (int i = 0; i < MAX_SAMPLES && index == -1; i++){
+		if (!sample_vector[i].samplePointer){
+			sample_vector[i].samplePointer = audiosample;
+			sample_vector[i].pos = 0;
+			memcpy(sample_vector[i].intensities, intensities, N_CHANNELS * sizeof(float));
+			sample_vector[i].flags = 0;
+			index = i;
+		}
+	}
+    //struct sample_queue *newSample = (struct sample_queue*)malloc(sizeof(struct sample_queue));
+	
+    if (!playing){
+        err = Pa_StartStream( stream );
+        if( err != paNoError ) {
+            std::cerr << "Error on Pa_StartStream()" << std::endl;
+			sample_vector[index].samplePointer = NULL;
+            return -1;
+        }
+        this->playing = true;
+    }
+
+	return index;
 }
 
 void Player::pause() {
-  this->playing = false;
+    err = Pa_StopStream( stream );
+    if( err != paNoError ){
+        std::cerr << "Error on Pa_StopStream()" << std::endl;
+        return;
+    }
+
+    this->playing = false;
 }
 
 void Player::stop() {
@@ -144,20 +168,13 @@ void Player::stop() {
 		std::cerr << "Error on Pa_StopStream()" << std::endl;
 		return;
 	}
+    this->playing = false;
 
-	err = Pa_CloseStream( stream );
-	if( err != paNoError ) {
-		std::cerr << "Error on Pa_StopStream()" << std::endl;
-		return;
-	}
-
-	Pa_Terminate();
-
-}
+    for (int i = 0; i < MAX_SAMPLES; i++){
+        sample_vector[i].samplePointer = NULL;
+    }
 
 
-Sample *Player::get_data(){
-	return audio_sample;
 }
 
 
@@ -169,28 +186,62 @@ int Player::PA_Callback (const void *inputBuffer, void *outputBuffer,
 
 	Player *player = (Player*) userData;
 	float *buffer = (float *) outputBuffer;
-	Sample *s = player->get_data();
 
-	if (s != NULL){
-		unsigned long int pos = s->position;
-		int i = 0;
-		while(i/N_CHANNELS < framesPerBuffer){
-			if (pos < s->get_n_frames()){
-				for (int j = 0; j < N_CHANNELS; j++){
-					buffer[i++] = s->data[pos*N_CHANNELS + j] ;
-				}
-				pos++;
-			}else{
-				for (int j = 0; j < N_CHANNELS; j++){
-					buffer[i++] = 0;
+	memset(outputBuffer, 0, sizeof(float) * framesPerBuffer * N_CHANNELS);
+
+	int somethingPlaying = 0;
+	for (int i = 0; i < MAX_SAMPLES; i++){
+		if (player->sample_vector[i].samplePointer != NULL){
+			somethingPlaying = 1;
+			for (int j = player->sample_vector[i].pos; j < player->sample_vector[i].samplePointer->get_n_frames() && j < framesPerBuffer + player->sample_vector[i].pos; j++){
+				for (int k = 0; k < N_CHANNELS; k++){
+					buffer[j - player->sample_vector[i].pos + k] += player->sample_vector[i].samplePointer->data[j * N_CHANNELS + k] * player->sample_vector[i].intensities[k];
+					//buffer[j - player->sample_vector[i].pos + k] = player->sample_vector[i].samplePointer->data[j * N_CHANNELS + k] * 1;
 				}
 			}
-
+			player->sample_vector[i].pos += framesPerBuffer;
+			if (player->sample_vector[i].pos >= player->sample_vector[i].samplePointer->get_n_frames()){
+				player->sample_vector[i].samplePointer = NULL;
+			}
 		}
-		s->position = pos;
-	}else{
-		memset(buffer, 0, framesPerBuffer * sizeof(float) * N_CHANNELS);
 	}
+	if (!somethingPlaying){
+		//player->pause();
+	}
+
+    //struct sample_queue* it = this->queue;
+	//while(it != NULL){
+		//for (int i = it->pos; i < it->samplePointer->get_n_frames() && i < framesPerBuffer; i++){
+			//for (int j = 0; i j < N_CHANNELS; j++){
+				//buffer[i - it->pos * N_CHANNELS + j] = it->samplePointer->data[i * N_CHANNELS + j]
+			//}
+		//}
+		//it->pos = i;
+		//if (it->pos >= it->samplePointer->get_n_frames()){
+			
+		//}
+		//it = it->next;
+	//}
+	//if (s != NULL){
+		//unsigned long int pos = s->position;
+		//int i = 0;
+		//while(i/N_CHANNELS < framesPerBuffer){
+			//if (pos < s->get_n_frames()){
+				//for (int j = 0; j < N_CHANNELS; j++){
+					//buffer[i++] = s->data[pos*N_CHANNELS + j] ;
+				//}
+				//pos++;
+			//}else{
+				//for (int j = 0; j < N_CHANNELS; j++){
+					//buffer[i++] = 0;
+				//}
+			//}
+
+		//}
+		//s->position = pos;
+	//}else{
+		//memset(buffer, 0, framesPerBuffer * sizeof(float) * N_CHANNELS);
+	//}
 	return 0;
 
 }

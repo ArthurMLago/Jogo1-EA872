@@ -20,7 +20,7 @@ namespace Audio{
 			float *data;
 			unsigned long int position;
 
-			Sample(char *filename);
+			Sample(const char *filename);
 			~Sample();
 
 			unsigned long int get_n_frames();

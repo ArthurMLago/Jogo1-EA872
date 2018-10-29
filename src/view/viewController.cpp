@@ -17,6 +17,10 @@ ViewController::ViewController(){
 	curs_set(0);
 	getmaxyx(stdscr, this->screenH, this->screenW);
 	
+	start_color();			/* Start color 			*/
+	init_pair(1, COLOR_RED, COLOR_BLACK);
+	init_pair(2, COLOR_YELLOW, COLOR_BLACK);
+	
 	// Criar thread que escuta por comandos:
 	inputThread = new std::thread(&ViewController::input_thread_routine, this);
 
@@ -30,8 +34,14 @@ ViewController::ViewController(int state){
 	raw();
 	curs_set(0);
 	getmaxyx(stdscr, this->screenH, this->screenW);
+
+	start_color();			/* Start color 			*/
+	init_pair(1, COLOR_RED, COLOR_BLACK);
+	init_pair(2, COLOR_YELLOW, COLOR_BLACK);
+
 	
 	player = NULL;
+
 	if (state != 0){
 		player = new Audio::Player();
 		// Criar samples de audio:
@@ -111,10 +121,13 @@ void ViewController::drawScene(){
 
 
 		move(y,x);
-		echochar('*');
+		addch('*');
 	}
 	move(currentScene->player->get_pos_y(), currentScene->player->get_pos_x());
-	echochar('P');
+
+	attron(COLOR_PAIR(1));
+	addch('P');
+	attroff(COLOR_PAIR(1));
 
 	refresh();
 

@@ -7,10 +7,10 @@ build/remoteKeyboard: src/remoteKeyboard.c
 	g++ $(CCFLAGS) src/remoteKeyboard.c -o build/remoteKeyboard -lncurses
 
 build/remoteViewer: build/enemy.o build/player.o build/scene.o build/gameController.o build/viewController.o build/playback.o src/remoteViewer.cpp
-	g++ $(CCFLAGS) src/remoteViewer.cpp build/scene.o build/viewController.o -o build/remoteViewer build/gameController.o build/playback.o build/player.o build/enemy.o libsndfile.a -lncurses -lpthread -lportaudio
+	g++ $(CCFLAGS) src/remoteViewer.cpp build/scene.o build/viewController.o -o build/remoteViewer build/gameController.o build/playback.o build/player.o build/enemy.o libsndfile.a libportaudio.a -lncurses -lpthread -lasound
 
 build/game: build/enemy.o build/player.o build/scene.o build/gameController.o build/viewController.o build/playback.o src/main.cpp
-	g++ $(CCFLAGS) build/enemy.o build/player.o build/scene.o build/gameController.o build/viewController.o build/playback.o src/main.cpp -o build/game libsndfile.a -lportaudio -lncurses -lpthread
+	g++ $(CCFLAGS) build/enemy.o build/player.o build/scene.o build/gameController.o build/viewController.o build/playback.o src/main.cpp -o build/game libsndfile.a libportaudio.a -lncurses -lpthread -lasound
 
 build/enemy.o: src/model/enemy.cpp src/model/enemy.hpp
 	g++ $(CCFLAGS) src/model/enemy.cpp -c -o build/enemy.o

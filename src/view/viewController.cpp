@@ -1,4 +1,5 @@
 #include "viewController.hpp"
+#include <math.h>
 
 //int ViewController::control = 0;
 
@@ -116,7 +117,8 @@ void ViewController::drawScene(){
 	erase();
 	// Desenha inigos:
 	for (int i = 0; i < currentScene->enemyList.size(); i++){
-		int x = currentScene->enemyList[i]->get_pos_x();
+		float x_super = currentScene->enemyList[i]->get_pos_x();
+		int x = roundf(x_super);
 		int y = currentScene->enemyList[i]->get_pos_y();
 
 

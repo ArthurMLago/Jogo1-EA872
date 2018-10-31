@@ -34,5 +34,5 @@ class ServerController{
 		// We need this to be able to call draw screen from inside waitForConnections
 		// This is kinda messy, but fucking works
 		void setViewController(ViewController *controller);
-}
+};
 

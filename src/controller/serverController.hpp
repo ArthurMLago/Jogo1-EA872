@@ -1,10 +1,19 @@
 #pragma once
 
+#include "../model/scene.hpp"
+#include "gameController.hpp"
+#include "../view/viewController.hpp"
+
+
 #define CONNECT_SECONDS 20
 
 
 class ServerController{
 	private:
+		// 
+		const char *listen_address;
+		int listen_port;
+
 		std::vector<int> socket_list;
 		Scene *currentScene;
 	public:
@@ -17,5 +26,13 @@ class ServerController{
 		
 		// Updates current scene to send it to peers:
 		void setCurrentScene(Scene *scene);
+
+		// Updates current Game Controller:
+		void setGameController(GameController *controller);
+
+		// Updates current view Controller:
+		// We need this to be able to call draw screen from inside waitForConnections
+		// This is kinda messy, but fucking works
+		void setViewController(ViewController *controller);
 }
 

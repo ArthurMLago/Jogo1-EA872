@@ -24,6 +24,9 @@ build/scene.o: src/model/scene.cpp src/model/scene.hpp
 build/gameController.o: src/controller/gameController.cpp src/controller/gameController.hpp src/controller/iuserResponder.hpp
 	g++ $(CCFLAGS) src/controller/gameController.cpp -c -o build/gameController.o
 
+build/serverController.o: src/controller/sereverController.cpp src/controller/serverController.hpp
+	g++ $(CCFLAGS) src/controller/gameController.cpp -c -o build/gameController.o
+
 build/playback.o: src/view/Playback.cpp src/view/Playback.hpp
 	g++ $(CCFLAGS) src/view/Playback.cpp -c -o build/playback.o
 

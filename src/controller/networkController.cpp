@@ -1,6 +1,0 @@
-
-
-int NetworkController::waitForConnections(){
-	
-
-}

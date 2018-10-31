@@ -30,7 +30,7 @@ void GameController::update(){
 		// Se ouver colisao entra no if
 		if((currentScene->enemyList[i]->get_pos_x() <= currentScene->player->get_pos_x()+0.5
 			&&currentScene->enemyList[i]->get_pos_x() >= currentScene->player->get_pos_x()-0.5) 
-				&&(currentScene->enemyList[i]->get_pos_y() == currentScene->player->get_pos_y())
+				&&(currentScene->enemyList[i]->get_pos_y() == currentScene->player->get_pos_y()))
 		   {
 				// Fim do jogo
 				viewController->showGameOverScreen();

@@ -21,7 +21,7 @@ build/player.o: src/model/player.cpp src/model/player.hpp
 build/scene.o: src/model/scene.cpp src/model/scene.hpp
 	g++ $(CCFLAGS) src/model/scene.cpp -c -o build/scene.o
 
-build/gameController.o: src/controller/gameController.cpp src/controller/gameController.hpp
+build/gameController.o: src/controller/gameController.cpp src/controller/gameController.hpp src/controller/iuserResponder.hpp
 	g++ $(CCFLAGS) src/controller/gameController.cpp -c -o build/gameController.o
 
 build/playback.o: src/view/Playback.cpp src/view/Playback.hpp

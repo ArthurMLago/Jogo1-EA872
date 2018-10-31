@@ -88,6 +88,23 @@ void GameController::userPressedDown(){
 	currentScene->player->move(0.0, -1.0);
 	viewController->playMoveSound();
 }
+
+
+void GameController::userPressedRight(){
+	int larg;
+	int alt;
+	viewController->getScreenDimension(&larg, &alt);
+	currentScene->player->move(1.0, 0.0);
+	viewController->playMoveSound();
+}
+void GameController::userPressedLeft(){
+	int larg;
+	int alt;
+	viewController->getScreenDimension(&larg, &alt);
+	currentScene->player->move(-1.0, 0.0);
+	viewController->playMoveSound();
+}
+
 /* 
 *Funcao que troca o valor da variavel shouldterminate
 */

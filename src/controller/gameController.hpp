@@ -2,10 +2,11 @@
 
 #include "../model/scene.hpp"
 #include "../view/viewController.hpp"
+#include "iuserResponder.hpp"
 
 class ViewController;
 
-class GameController {
+class GameController : public UserResponder{
 	private:
 		Scene *currentScene;
 		ViewController *viewController;
@@ -18,6 +19,8 @@ class GameController {
 		void update();
 		void userPressedUp();
 		void userPressedDown();
+		void userPressedRight();
+		void userPressedLeft();
 		void terminate(); 
 		int shouldTerminate();
 	

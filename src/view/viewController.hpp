@@ -12,7 +12,7 @@
 
 #include "Playback.hpp"
 #include "../model/scene.hpp"
-#include "../controller/gameController.hpp"
+#include "../controller/iuserResponder.hpp"
 
 
 class GameController;
@@ -24,7 +24,7 @@ class ViewController{
 
 		Audio::Player *player;
 
-		GameController *gameController;
+		UserResponder *gameController;
 		Scene *currentScene;
 
 		std::thread *inputThread;
@@ -39,7 +39,7 @@ class ViewController{
 		ViewController(int state);
 		~ViewController();
 		
-		void setGameController(GameController *gameController);
+		void setGameController(UserResponder *gameController);
 		void setScene(Scene *currentScene);
 
 		void getScreenDimension(int *dst_Width, int *dst_Height);

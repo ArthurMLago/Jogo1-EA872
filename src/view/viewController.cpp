@@ -68,7 +68,7 @@ ViewController::~ViewController(){
 	endwin();
 }
 
-void ViewController::setGameController(GameController *gameController){
+void ViewController::setGameController(UserResponder *gameController){
 	this->gameController = gameController;
 }
 

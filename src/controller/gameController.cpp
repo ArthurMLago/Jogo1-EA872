@@ -30,8 +30,8 @@ void GameController::update(){
 		// Se ouver colisao entra no if
 		if((currentScene->enemyList[i]->get_pos_x() <= currentScene->player->get_pos_x()+0.5
 			&&currentScene->enemyList[i]->get_pos_x() >= currentScene->player->get_pos_x()-0.5) 
-				&&(currentScene->enemyList[i]->get_pos_y() <= currentScene->player->get_pos_y()+0.5
-					&&currentScene->enemyList[i]->get_pos_y() >= currentScene->player->get_pos_y()-0.5)){
+				&&(currentScene->enemyList[i]->get_pos_y() == currentScene->player->get_pos_y())
+		   {
 				// Fim do jogo
 				viewController->showGameOverScreen();
 				//viewController->playCollisionSound();
@@ -72,7 +72,7 @@ void GameController::userPressedUp(){
 	int larg;
 	int alt;
 	viewController->getScreenDimension(&larg, &alt);
-	currentScene->player->move(0.0, 1.0);
+	currentScene->player->move(0.0, 1);
 	viewController->playMoveSound();
 
 }
@@ -85,7 +85,7 @@ void GameController::userPressedDown(){
 	int larg;
 	int alt;
 	viewController->getScreenDimension(&larg, &alt);
-	currentScene->player->move(0.0, -1.0);
+	currentScene->player->move(0.0, -1);
 	viewController->playMoveSound();
 }
 /* 

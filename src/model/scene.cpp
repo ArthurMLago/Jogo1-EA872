@@ -1,10 +1,13 @@
 #include "scene.hpp"
 
 Scene::~Scene(){
-	delete player;
 	for (int i = enemyList.size() - 1; i >= 0; i--){
 		delete enemyList[i];
 		enemyList.pop_back();
+	}
+	for (int i = playerList.size() - 1; i >= 0; i--){
+		delete playerList[i];
+		playerList.pop_back();
 	}
 }
 
@@ -19,8 +22,8 @@ unsigned char *Scene::serialize(int *n_bytes){
 		memcpy(result + offset, enemyList[i], sizeof(Enemy));
 		offset += sizeof(Enemy);
 	}
-	memcpy(result + offset, player, sizeof(Player));
-	offset += sizeof(Player);
+	//memcpy(result + offset, player, sizeof(Player));
+	//offset += sizeof(Player);
 	*n_bytes = offset;
 	return result;
 }
@@ -40,8 +43,5 @@ void Scene::unserialize(unsigned char *buffer){
 		memcpy(enemyList[i], buffer + offset, sizeof(Enemy));
 		offset += sizeof(Enemy);
 	}
-	memcpy(player, buffer + offset, sizeof(Player));
-	
-
-
+	//memcpy(player, buffer + offset, sizeof(Player));
 }

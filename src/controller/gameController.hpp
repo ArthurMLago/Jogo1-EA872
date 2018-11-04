@@ -21,6 +21,10 @@ class GameController : public UserResponder{
 		void userPressedDown();
 		void userPressedRight();
 		void userPressedLeft();
+		void userPressedUp(int index);
+		void userPressedDown(int index);
+		void userPressedRight(int index);
+		void userPressedLeft(int index);
 		void playerConnected(int index);
 		void terminate(); 
 		int shouldTerminate();

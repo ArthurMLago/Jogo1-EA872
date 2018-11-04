@@ -12,6 +12,7 @@ class Player {
 
 		float get_pos_x();
 		int get_pos_y();
+		int get_socket_index();
 		void move(float delta_x, int delta_y);
 
 };

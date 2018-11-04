@@ -125,11 +125,14 @@ void ViewController::drawScene(){
 		move(y,x);
 		addch('*');
 	}
-	move(currentScene->player->get_pos_y(), currentScene->player->get_pos_x());
+	for (int i = 0; i < currentScene->playerList.size(); i++){
+		move(currentScene->playerList[i]->get_pos_y(), currentScene->playerList[i]->get_pos_x());
 
-	attron(COLOR_PAIR(1));
-	addch('P');
-	attroff(COLOR_PAIR(1));
+		attron(COLOR_PAIR(1));
+		addch('P');
+		attroff(COLOR_PAIR(1));
+
+	}
 
 	refresh();
 

@@ -14,6 +14,15 @@ ServerController::ServerController(const char *listen_address, int listen_port){
 
 ServerController::~ServerController(){
 	for (int i = 0; i < socket_list.size(); i++){
+		int n_read = 128;
+		char buff[128];
+		while (n_read > 0){
+			n_read = recv(socket_list[i], buff, 128, 0);
+			if (n_read == -1){
+				fprintf(stderr, "error : %s\n", strerror(errno));
+			}
+			fprintf(stderr, "%d n_read = %d\n", socket_list[i], n_read);
+		}
 		close(socket_list[i]);
 	}
 }
@@ -24,6 +33,10 @@ int ServerController::waitForConnections(){
 
 	// Create socket:	
 	server_fd = socket(AF_INET, SOCK_STREAM, 0);
+	// Make it ignore TIME-WAIT:
+	int enable = 1;
+	if (setsockopt(server_fd, SOL_SOCKET, SO_REUSEADDR, &enable, sizeof(int)) < 0)
+		fprintf(stderr, "setsockopt(SO_REUSEADDR) failed\n");
 
 	// Define which interface and port to listen for connections:
 	myself.sin_family = AF_INET;
@@ -31,7 +44,7 @@ int ServerController::waitForConnections(){
 	inet_aton(listen_address, &(myself.sin_addr));
 
 	// Bind our socket to the interface address and port:
-	while(!gController->shouldTerminate() && bind(server_fd, (struct sockaddr*)&myself, sizeof(myself)) == 0){
+	while(!gController->shouldTerminate() && bind(server_fd, (struct sockaddr*)&myself, sizeof(myself)) != 0){
 		fprintf(stderr, "Problemas ao abrir porta %d na interface %s\n", listen_port, listen_address);
 		fprintf(stderr, "\tError %d : %s\n", errno, strerror(errno));
 		sleep(1);
@@ -47,7 +60,7 @@ int ServerController::waitForConnections(){
 		struct sockaddr_in client;
 		socklen_t client_size = (socklen_t)sizeof(client);
 		// Accept new client connection:
-		client_fd = accept(server_fd, &client, &client_size, O_NONBLOCK); //not POSIX, should fcntl after instead
+		client_fd = accept4(server_fd, (struct sockaddr *)&client, &client_size, O_NONBLOCK); //not POSIX, should fcntl after instead
 		if (client_fd != -1){
 			int index = socket_list.size();
 			int n_written = 0;

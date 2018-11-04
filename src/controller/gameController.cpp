@@ -63,12 +63,16 @@ void GameController::setScene(Scene *pointer){
 }
 
 void GameController::userPressedUp(){
+	fprintf(stderr, "no local player\n");
 }
 void GameController::userPressedDown(){
+	fprintf(stderr, "no local player\n");
 }
 void GameController::userPressedRight(){
+	fprintf(stderr, "no local player\n");
 }
 void GameController::userPressedLeft(){
+	fprintf(stderr, "no local player\n");
 }
 
 /*

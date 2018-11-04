@@ -139,48 +139,19 @@ void ViewController::drawScene(){
 }
 
 void ViewController::input_thread_routine(){
-
-	int socket_fd, connection_fd;
-	struct sockaddr_in myself, client;
-	socklen_t client_size = (socklen_t)sizeof(client);
-	char input_buffer[50];
-
-	socket_fd = socket(AF_INET, SOCK_STREAM, 0);
-	fprintf(stderr, "Socket criado\n");
-
-	myself.sin_family = AF_INET;
-	myself.sin_port = htons(18259);
-	inet_aton("127.0.0.1", &(myself.sin_addr));
-	
-	fprintf(stderr, "Tentando abrir porta 3001\n");
-	while(bind(socket_fd, (struct sockaddr*)&myself, sizeof(myself)) == 0) {
-
-		fprintf(stderr, "Problemas ao abrir porta\n");
-		sleep(1);
-	}
-	fprintf(stderr, "Abri porta 3001!\n");
-
-	listen(socket_fd, 2);
-	fprintf(stderr, "Estou ouvindo na porta 3001!\n");
-
-
-	while ((gameController == NULL) || (!gameController->shouldTerminate())) {
-		fprintf(stderr, "Vou travar ate receber alguma coisa\n");
-		connection_fd = accept(socket_fd, (struct sockaddr*)&client, &client_size);
-
-		int read_bytes = 1;
-		while(((gameController == NULL) || (!gameController->shouldTerminate())) && read_bytes == 1){
-			char c;
-			read_bytes = recv(connection_fd, &c, 1, 0);
-			if (c != ERR){
-				if (c == 'w'){
-					gameController->userPressedUp();
-				}else if(c == 's'){
-					gameController->userPressedDown();
-				}else if(c == 'q'){
-					gameController->terminate();
-				}
+	char c;
+	while((gameController == NULL) || (!gameController->shouldTerminate())){
+		c = getch();
+		if (c != ERR){
+			if (c == 'w'){
+				gameController->userPressedUp();
+			}else if(c == 's'){
+				gameController->userPressedDown();
+			}else if(c == 'q'){
+				gameController->terminate();
 			}
 		}
+		std::this_thread::sleep_for(std::chrono::milliseconds(16));
+
 	}
 }

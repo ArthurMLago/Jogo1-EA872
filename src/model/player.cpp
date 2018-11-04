@@ -1,6 +1,6 @@
 #include "player.hpp"
 
-Player::Player(float pos_x,int pos_y){
+Player::Player(float pos_x, int pos_y, int socket_index){
 	this->pos_x = pos_x;
 	this->pos_y = pos_y;
 

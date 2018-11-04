@@ -2,6 +2,8 @@
 #include <fcntl.h>
 #include <thread>
 #include "controller/gameController.hpp"
+#include "controller/serverController.hpp"
+#include <signal.h>
 
 
 Scene *globalScene;
@@ -10,10 +12,12 @@ GameController *gController;
 void remoteUpdater();
 
 int main(){
+	signal(SIGPIPE, SIG_IGN);
 
 	GameController gameController;
 	ViewController viewController;
 	Scene currentScene;
+	ServerController serverController("127.0.0.1", 7823);
 
 	gController = &gameController;
 	globalScene = &currentScene;
@@ -30,9 +34,15 @@ int main(){
 	int alt;
 	viewController.getScreenDimension(&larg, &alt);
 
-	currentScene.player = new Player(larg/2,alt/2);
+	//currentScene.player = new Player(larg/2,alt/2);
 
 	std::thread first(remoteUpdater);
+
+	serverController.setGameController(&gameController);
+	serverController.setViewController(&viewController);
+	serverController.setCurrentScene(&currentScene);
+
+	serverController.waitForConnections();
 
 	while(!gameController.shouldTerminate()){
 	//while(1){
@@ -46,6 +56,7 @@ int main(){
 }
 
 void remoteUpdater(){
+	return;
 	int socket_fd, connection_fd;
 	struct sockaddr_in myself, client;
 	socklen_t client_size = (socklen_t)sizeof(client);
@@ -72,7 +83,7 @@ void remoteUpdater(){
 	
 	while(!gController->shouldTerminate()){
 		fprintf(stderr, "Vou travar ate receber alguma coisa\n");
-		connection_fd = accept(socket_fd, (struct sockaddr*)&client, &client_size);
+		connection_fd = accept(socket_fd, NULL, NULL);
 		sleep(1);
 
 		if (connection_fd != -1){

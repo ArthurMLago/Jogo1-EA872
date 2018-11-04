@@ -10,7 +10,7 @@
 class Scene {
 	public:
 		std::vector<Enemy*> enemyList;
-		Player *player;
+		std::vector<Player*> *playerList;
 
 		~Scene();
 		unsigned char *serialize(int *n_bytes);

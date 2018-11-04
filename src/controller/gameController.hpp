@@ -21,6 +21,7 @@ class GameController : public UserResponder{
 		void userPressedDown();
 		void userPressedRight();
 		void userPressedLeft();
+		void playerConnected(int index);
 		void terminate(); 
 		int shouldTerminate();
 	

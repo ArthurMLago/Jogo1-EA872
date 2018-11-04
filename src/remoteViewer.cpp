@@ -2,15 +2,20 @@
 #include <thread>
 #include "view/viewController.hpp"
 #include "model/scene.hpp"
+#include <signal.h>
 
 void closer();
 
 volatile int finish = 0;
+
+
+
 int main(){
+	//signal(SIGPIPE, SIG_IGN);
 
 	ViewController viewController(0);
 	Scene currentScene;
-	currentScene.player = new Player(0,0);
+	//currentScene.player = new Player(0,0);
 	viewController.setScene(&currentScene);
 	std::thread ttthread(closer);
 	

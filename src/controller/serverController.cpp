@@ -14,16 +14,18 @@ ServerController::ServerController(const char *listen_address, int listen_port){
 
 ServerController::~ServerController(){
 	for (int i = 0; i < socket_list.size(); i++){
-		int n_read = 128;
-		char buff[128];
-		while (n_read > 0){
-			n_read = recv(socket_list[i], buff, 128, 0);
-			if (n_read == -1){
-				fprintf(stderr, "error : %s\n", strerror(errno));
+		if (socket_list[i] != -1){
+			int n_read = 128;
+			char buff[128];
+			while (n_read > 0){
+				n_read = recv(socket_list[i], buff, 128, 0);
+				if (n_read == -1){
+					fprintf(stderr, "error : %s\n", strerror(errno));
+				}
+				fprintf(stderr, "%d n_read = %d\n", socket_list[i], n_read);
 			}
-			fprintf(stderr, "%d n_read = %d\n", socket_list[i], n_read);
+			close(socket_list[i]);
 		}
-		close(socket_list[i]);
 	}
 }
 

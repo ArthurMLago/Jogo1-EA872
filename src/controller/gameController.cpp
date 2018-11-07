@@ -123,6 +123,17 @@ void GameController::userPressedLeft(int index){
 	}
 }
 
+void GameController::playerQuit(int index){
+	fprintf(stderr, "player quit %d\n", index);
+	int found = 0;
+	for (int i = 0; i < currentScene->playerList.size() && !found; i++){
+		if (currentScene->playerList[i]->get_socket_index() == index){
+			currentScene->playerList.erase(currentScene->playerList.begin()+i);
+			found = 1;
+		}
+	}
+}
+
 /* 
 *Funcao que troca o valor da variavel shouldterminate
 */

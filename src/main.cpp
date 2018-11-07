@@ -13,6 +13,9 @@ void remoteUpdater();
 
 int main(){
 	signal(SIGPIPE, SIG_IGN);
+	unsigned long int seed = time(NULL);
+	fprintf(stderr,"used seed: %ld\n", seed);
+	srand(seed);
 
 	GameController gameController;
 	ViewController viewController;

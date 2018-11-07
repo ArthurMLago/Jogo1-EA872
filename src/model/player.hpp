@@ -9,6 +9,7 @@ class Player {
 
 	public:
 		Player(float pos_x, int pos_y, int socket_index);
+		~Player();
 
 		float get_pos_x();
 		int get_pos_y();

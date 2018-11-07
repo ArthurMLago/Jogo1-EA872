@@ -26,6 +26,9 @@ class ServerController{
 		GameController *gController;
 		ViewController *vController;
 		Scene *currentScene;
+
+		std::thread *sendThread;
+		std::thread *recvThread;
 	public:
 		ServerController(const char *listen_address, int listen_port);
 		~ServerController();
@@ -34,7 +37,8 @@ class ServerController{
 		int waitForConnections();
 		
 		// Thread that constantly sends the current screen for peers and receives their input:
-		void socketMonitorThread();
+		void recvThreadRoutine();
+		void sendThreadRoutine();
 		
 		// Updates current scene to send it to peers:
 		void setCurrentScene(Scene *scene);

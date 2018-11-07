@@ -91,7 +91,42 @@ int ServerController::waitForConnections(){
 	//}
 	fprintf(stderr, "Finishing connecting stage, %d clients connected\n", socket_list.size());
 
+	recvThread = new std::thread(&ServerController::recvThreadRoutine, this);
+
 	return socket_list.size();
+}
+
+void ServerController::recvThreadRoutine(){
+	fprintf(stderr, "receive thread started\n");
+	while(!gController->shouldTerminate()){
+		for (int i = 0; i < socket_list.size(); i++){
+			if (socket_list[i] != -1){
+				unsigned char received;
+				int n_recv = recv(socket_list[i], &received, 1, 0);
+				if (n_recv == 1){
+					if (received == 'w'){
+						gController->userPressedUp(i);
+					}else if (received == 'd'){
+						gController->userPressedRight(i);
+					}else if (received == 'a'){
+						gController->userPressedLeft(i);
+					}else if(received == 's'){
+						gController->userPressedDown(i);
+					}else if(received == 'q'){
+						gController->playerQuit(i);
+					}
+				}else if (n_recv == 0){
+					close(socket_list[i]);
+					socket_list[i] = -1;
+					gController->playerQuit(i);
+				}
+			}
+		}
+	}
+}
+
+void ServerController::sendThreadRoutine(){
+	
 }
 
 void ServerController::setGameController(GameController *controller){

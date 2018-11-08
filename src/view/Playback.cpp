@@ -9,9 +9,8 @@ Sample::Sample(const char *filename){
 	float buffer[2520];
 
 	if (! (infile = sf_open (filename, SFM_READ, &sfinfo))){
-		printf ("Not able to open input file %s.\n", filename) ;
 		/* Print the error message from libsndfile. */
-		puts (sf_strerror (NULL)) ;
+		fprintf (stderr, "Not able to open input file %s : %s\n", filename, sf_strerror (NULL));
 
 		n_channels = 0;
 		n_frames = 0;
@@ -94,7 +93,7 @@ Player::Player() {
 	err = Pa_OpenStream( &stream,
 						 NULL,    //  [> No input. <]
 						 &outputParameters,
-						 46000,
+						 48000,
 						 256,      // [> Frames per buffer. <]
 						 paClipOff,// [> We won't output out of range samples so don't bother clipping them. <]
 						 &Player::PA_Callback,
@@ -195,7 +194,7 @@ int Player::PA_Callback (const void *inputBuffer, void *outputBuffer,
 			somethingPlaying = 1;
 			for (int j = player->sample_vector[i].pos; j < player->sample_vector[i].samplePointer->get_n_frames() && j < framesPerBuffer + player->sample_vector[i].pos; j++){
 				for (int k = 0; k < N_CHANNELS; k++){
-					buffer[j - player->sample_vector[i].pos + k] += player->sample_vector[i].samplePointer->data[j * N_CHANNELS + k] * player->sample_vector[i].intensities[k];
+					buffer[(j - player->sample_vector[i].pos)*N_CHANNELS + k] += player->sample_vector[i].samplePointer->data[j * N_CHANNELS + k] * player->sample_vector[i].intensities[k];
 					//buffer[j - player->sample_vector[i].pos + k] = player->sample_vector[i].samplePointer->data[j * N_CHANNELS + k] * 1;
 				}
 			}

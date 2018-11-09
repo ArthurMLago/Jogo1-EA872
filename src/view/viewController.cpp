@@ -15,6 +15,7 @@ ViewController::ViewController(){
 	// Inicar ncurses:
 	initscr();
 	raw();
+    noecho();
 	curs_set(0);
 	getmaxyx(stdscr, this->screenH, this->screenW);
 	

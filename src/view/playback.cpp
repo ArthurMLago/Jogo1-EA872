@@ -9,9 +9,8 @@ Sample::Sample(const char *filename){
 	float buffer[2520];
 
 	if (! (infile = sf_open (filename, SFM_READ, &sfinfo))){
-		printf ("Not able to open input file %s.\n", filename) ;
 		/* Print the error message from libsndfile. */
-		puts (sf_strerror (NULL)) ;
+		fprintf (stderr, "Not able to open input file %s: %s\n", filename, sf_strerror(NULL)) ;
 
 		n_channels = 0;
 		n_frames = 0;

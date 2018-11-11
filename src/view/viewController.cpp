@@ -26,6 +26,9 @@ ViewController::ViewController(){
 	inputThread = new std::thread(&ViewController::input_thread_routine, this);
 
 	control = 0;
+
+	gameController = NULL;
+	currentScene = NULL;
 }
 ViewController::ViewController(int state){
 	this->state = state;

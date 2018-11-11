@@ -22,8 +22,8 @@ build/gameController.o: src/controller/gameController.cpp src/controller/gameCon
 build/serverController.o: src/controller/serverController.cpp src/controller/serverController.hpp
 	g++ $(CCFLAGS) src/controller/serverController.cpp -c -o build/serverController.o
 
-build/playback.o: src/view/Playback.cpp src/view/Playback.hpp
-	g++ $(CCFLAGS) src/view/Playback.cpp -c -o build/playback.o
+build/playback.o: src/view/playback.cpp src/view/playback.hpp
+	g++ $(CCFLAGS) src/view/playback.cpp -c -o build/playback.o
 
 build/viewController.o: src/view/viewController.cpp src/view/viewController.hpp
 	g++ $(CCFLAGS) src/view/viewController.cpp -c -o build/viewController.o

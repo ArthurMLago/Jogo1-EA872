@@ -91,7 +91,7 @@ int ServerController::waitForConnections(){
 		//}
 		//sleep(1);
 	//}
-	fprintf(stderr, "Finishing connecting stage, %d clients connected\n", socket_list.size());
+	fprintf(stderr, "Finishing connecting stage, %lu clients connected\n", socket_list.size());
 
 	recvThread = new std::thread(&ServerController::recvThreadRoutine, this);
 

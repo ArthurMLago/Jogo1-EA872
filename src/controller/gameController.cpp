@@ -1,5 +1,7 @@
 #include "gameController.hpp"
 
+#define CREATION_OPPOSITION 10.0
+
 /*
 *Funcao chamada a cada frame do jogo, provavelmente 60 vezes por segundos
 *Deve cuidar das funcoes basicas do jogo, como criar mais inimigos bolas, fazer os inimigos se movimentarem,
@@ -11,11 +13,18 @@ void GameController::update(){
 	int alt;
 	viewController->getScreenDimension(&larg, &alt);
 	float val = alt*((float)(rand())/RAND_MAX);
-	// a cada 2 segundos entra no if 
-	if(tempo%20 == 0){
+
+	float dificuldade = log(1.3 + tempo/60.0/20);
+	if (dificuldade > 9)
+		dificuldade = 9;
+
+	// a cada 2 segundos entra no if
+	float rand_v = (float)rand()/(float)(RAND_MAX/CREATION_OPPOSITION);
+	while(rand_v < dificuldade){
 		// cria mais bolas
-		Enemy* novo_enemy = new Enemy(0.5, val,(0.3 * (float)(rand())/RAND_MAX));
+		Enemy* novo_enemy = new Enemy(0.5, val,0.05 + (0.3 * (float)(rand())/RAND_MAX));
 		currentScene->enemyList.push_back(novo_enemy);
+		rand_v = (float)rand()/(float)(RAND_MAX/CREATION_OPPOSITION);
 	}
 
 	// move as bolas que ja existem
@@ -45,6 +54,11 @@ void GameController::update(){
 			currentScene->enemyList.erase(currentScene->enemyList.begin() + i);
 		}
 	}
+
+	if (tempo % 60 == 0){
+		fprintf(stderr, "Tempo: %d; Dificuldade: %lf\n", tempo, dificuldade);
+	}
+
 	tempo++;
 }
 

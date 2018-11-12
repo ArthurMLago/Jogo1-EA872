@@ -1,5 +1,6 @@
 #pragma once
 
+#include <math.h>
 #include "../model/scene.hpp"
 #include "../view/viewController.hpp"
 #include "iuserResponder.hpp"

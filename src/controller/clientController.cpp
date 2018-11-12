@@ -149,5 +149,19 @@ int ClientController::shouldTerminate(){
 	return shouldTerminate_Aux;	
 }
 
+/*
+*Essa funcão atualiza a propriedade viewController para o ponteiro passado.
+*/
+void ClientController::setViewController(ViewController *pointer){
+	viewController = pointer;
+}
+
+/*
+*Essa funcão atualiza a propriedade Setscene para o ponteiro passado.
+*/
+void ClientController::setScene(Scene *pointer){
+	currentScene = pointer;
+}
+
 
 

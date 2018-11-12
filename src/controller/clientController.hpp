@@ -24,5 +24,7 @@ class ClientController : public UserResponder{
 		void userPressedRight();
 		void terminate();
 		int shouldTerminate();
+		void setViewController(ViewController *pointer);
+		void setScene(Scene *pointer);
 
 };

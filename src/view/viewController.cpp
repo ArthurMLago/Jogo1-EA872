@@ -22,13 +22,13 @@ ViewController::ViewController(){
 	init_pair(1, COLOR_RED, COLOR_BLACK);
 	init_pair(2, COLOR_YELLOW, COLOR_BLACK);
 	
+	gameController = NULL;
+	currentScene = NULL;
 	// Criar thread que escuta por comandos:
 	inputThread = new std::thread(&ViewController::input_thread_routine, this);
 
 	control = 0;
 
-	gameController = NULL;
-	currentScene = NULL;
 }
 ViewController::ViewController(int state){
 	this->state = state;
@@ -45,6 +45,8 @@ ViewController::ViewController(int state){
 
 	
 	player = NULL;
+	gameController = NULL;
+	currentScene = NULL;
 
 	if (state != 0){
 		player = new Audio::Player();
@@ -63,7 +65,8 @@ ViewController::~ViewController(){
 	if (state){
 		inputThread->join();
 		delete inputThread;
-	
+
+		delete player;	
 		delete moveSample;
 		delete collideSample;
 		delete gameOverSample;

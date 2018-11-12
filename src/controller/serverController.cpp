@@ -27,6 +27,8 @@ ServerController::~ServerController(){
 			close(socket_list[i]);
 		}
 	}
+	recvThread->join();
+	delete recvThread;
 }
 
 int ServerController::waitForConnections(){

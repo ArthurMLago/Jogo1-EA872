@@ -13,6 +13,9 @@ class GameController : public UserResponder{
 		int tempo = 0; //variável global que conta o tempo começa em 0
 		int shouldTerminate_var = 0; // jogo deve acabar
 
+		int screenW;
+		int screenH;
+
 	public:
 		void setViewController(ViewController *pointer);
 		void setScene(Scene *pointer);

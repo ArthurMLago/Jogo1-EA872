@@ -141,14 +141,13 @@ void ClientController::userPressedRight(){
 
 // Funcao que altera o valor do shouldTerminate_Aux
 void ClientController::terminate(){
-
-	
+	shouldTerminate_Aux = 1;
 }
 
+// Funcao que retorna o valor do shouldTerminate_Aux
 int ClientController::shouldTerminate(){
-	
+	return shouldTerminate_Aux;	
 }
-
 
 
 

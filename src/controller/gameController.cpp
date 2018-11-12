@@ -84,6 +84,7 @@ void GameController::userPressedUp(int index){
 	for (int i = 0; i < currentScene->playerList.size() && !found; i++){
 		if (currentScene->playerList[i]->get_socket_index() == index){
 			currentScene->playerList[i]->move(0,-1);
+            viewController->playMoveSound();
 			found = 1;
 		}
 	}
@@ -98,6 +99,7 @@ void GameController::userPressedDown(int index){
 	for (int i = 0; i < currentScene->playerList.size() && !found; i++){
 		if (currentScene->playerList[i]->get_socket_index() == index){
 			currentScene->playerList[i]->move(0,1);
+            viewController->playMoveSound();
 			found = 1;
 		}
 	}
@@ -109,6 +111,7 @@ void GameController::userPressedRight(int index){
 	for (int i = 0; i < currentScene->playerList.size() && !found; i++){
 		if (currentScene->playerList[i]->get_socket_index() == index){
 			currentScene->playerList[i]->move(1,0);
+            viewController->playMoveSound();
 			found = 1;
 		}
 	}
@@ -118,6 +121,7 @@ void GameController::userPressedLeft(int index){
 	for (int i = 0; i < currentScene->playerList.size() && !found; i++){
 		if (currentScene->playerList[i]->get_socket_index() == index){
 			currentScene->playerList[i]->move(-1,0);
+            viewController->playMoveSound();
 			found = 1;
 		}
 	}

@@ -194,7 +194,7 @@ int Player::PA_Callback (const void *inputBuffer, void *outputBuffer,
 			somethingPlaying = 1;
 			for (int j = player->sample_vector[i].pos; j < player->sample_vector[i].samplePointer->get_n_frames() && j < framesPerBuffer + player->sample_vector[i].pos; j++){
 				for (int k = 0; k < N_CHANNELS; k++){
-					buffer[j - player->sample_vector[i].pos + k] += player->sample_vector[i].samplePointer->data[j * N_CHANNELS + k] * player->sample_vector[i].intensities[k];
+					buffer[(j - player->sample_vector[i].pos) * N_CHANNELS + k] += player->sample_vector[i].samplePointer->data[j * N_CHANNELS + k] * player->sample_vector[i].intensities[k];
 					//buffer[j - player->sample_vector[i].pos + k] = player->sample_vector[i].samplePointer->data[j * N_CHANNELS + k] * 1;
 				}
 			}

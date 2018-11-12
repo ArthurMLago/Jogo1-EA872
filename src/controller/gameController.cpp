@@ -22,7 +22,7 @@ void GameController::update(){
 	float rand_v = (float)rand()/(float)(RAND_MAX/CREATION_OPPOSITION);
 	while(rand_v < dificuldade){
 		// cria mais bolas
-		Enemy* novo_enemy = new Enemy(0.5, val,0.05 + (0.3 * (float)(rand())/RAND_MAX));
+		Enemy* novo_enemy = new Enemy(-0.5, val,0.05 + (0.3 * (float)(rand())/RAND_MAX));
 		currentScene->enemyList.push_back(novo_enemy);
 		rand_v = (float)rand()/(float)(RAND_MAX/CREATION_OPPOSITION);
 	}
@@ -121,7 +121,7 @@ void GameController::userPressedUp(int index){
 	int found = 0;
 	for (int i = 0; i < currentScene->playerList.size() && !found; i++){
 		if (currentScene->playerList[i]->get_socket_index() == index){
-			if (currentScene->playerList[i]->get_pos_y() - 1 > 0){
+			if (currentScene->playerList[i]->get_pos_y() - 1 >= 0){
 				currentScene->playerList[i]->move(0,-1);
 				viewController->playMoveSound();
 			}
@@ -138,8 +138,10 @@ void GameController::userPressedDown(int index){
 	int found = 0;
 	for (int i = 0; i < currentScene->playerList.size() && !found; i++){
 		if (currentScene->playerList[i]->get_socket_index() == index){
-			currentScene->playerList[i]->move(0,1);
-			viewController->playMoveSound();
+			if (currentScene->playerList[i]->get_pos_y() + 1 <= screenH){
+				currentScene->playerList[i]->move(0,1);
+				viewController->playMoveSound();
+			}
 			found = 1;
 		}
 	}
@@ -150,8 +152,10 @@ void GameController::userPressedRight(int index){
 	int found = 0;
 	for (int i = 0; i < currentScene->playerList.size() && !found; i++){
 		if (currentScene->playerList[i]->get_socket_index() == index){
-			currentScene->playerList[i]->move(1,0);
-			viewController->playMoveSound();
+			if (currentScene->playerList[i]->get_pos_x() + 1 < screenW ){
+				currentScene->playerList[i]->move(1,0);
+				viewController->playMoveSound();
+			}
 			found = 1;
 		}
 	}

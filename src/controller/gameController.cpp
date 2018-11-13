@@ -141,7 +141,7 @@ void GameController::userPressedDown(int index){
 	int found = 0;
 	for (int i = 0; i < currentScene->playerList.size() && !found; i++){
 		if (currentScene->playerList[i]->get_socket_index() == index){
-			if (currentScene->playerList[i]->get_pos_y() + 1 <= screenH){
+			if (currentScene->playerList[i]->get_pos_y() + 1 < screenH){
 				currentScene->playerList[i]->move(0,1);
 				viewController->playMoveSound();
 			}

@@ -105,6 +105,8 @@ void ClientController::receive_thread(){
 			continue;
 		}
 		i = i + numero_inimigos*sizeof(Enemy);
+
+		currentScene->unserialize(buffer + 4 + pular_bytes);
 	}
 }
 

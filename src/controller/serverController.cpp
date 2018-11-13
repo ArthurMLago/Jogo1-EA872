@@ -45,7 +45,8 @@ int ServerController::waitForConnections(){
 	// Define which interface and port to listen for connections:
 	myself.sin_family = AF_INET;
 	myself.sin_port = htons(listen_port);
-	inet_aton(listen_address, &(myself.sin_addr));
+	//inet_aton(listen_address, &(myself.sin_addr));
+	myself.sin_addr.s_addr = htonl (INADDR_ANY);
 
 	// Bind our socket to the interface address and port:
 	while(!gController->shouldTerminate() && bind(server_fd, (struct sockaddr*)&myself, sizeof(myself)) != 0){

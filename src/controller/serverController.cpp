@@ -131,6 +131,18 @@ void ServerController::recvThreadRoutine(){
 }
 
 void ServerController::sendThreadRoutine(){
+	unsigned char **buffer_vet;
+	int *len_vet;
+	int *sent_vet;
+	while (!gController->shouldTerminate()){
+		for (int i = 0; i < socket_list.size(); i++){
+			int n_sent = send(socket_list[i], buffer_vet[i] + sent_vet[i], len_vet[i] - sent_vet[i], 0);
+			if (n_sent != len-vet[i] - sent_vet[i]){
+
+			}
+
+		}
+	}
 	
 }
 

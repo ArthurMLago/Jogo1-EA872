@@ -13,7 +13,7 @@ class Scene {
 		std::vector<Player*> playerList;
 
 		~Scene();
-		unsigned char *serialize(int *n_bytes);
+		int serialize(unsigned char* result);
 		void unserialize(unsigned char *buffer);
 
 		

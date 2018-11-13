@@ -11,8 +11,7 @@ Scene::~Scene(){
 	}
 }
 
-unsigned char *Scene::serialize(int *n_bytes){
-	static unsigned char result[65536];
+int Scene::serialize(unsigned char* result){
 	int offset = 0;
 	int n_players = playerList.size();
 	int n_enemies = enemyList.size();
@@ -37,8 +36,7 @@ unsigned char *Scene::serialize(int *n_bytes){
 	}
 	//memcpy(result + offset, player, sizeof(Player));
 	//offset += sizeof(Player);
-	*n_bytes = offset;
-	return result;
+	return offset;
 }
 
 void Scene::unserialize(unsigned char *buffer){

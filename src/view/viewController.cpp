@@ -95,7 +95,7 @@ void ViewController::playCollisionSound(){
 
 void ViewController::playMoveSound(){
 	//moveSample->position = 0;
-	float intensities[2] = {1.0,1.0};
+	float intensities[2] = {0.7,0.7};
 	if (player)
 		player->play(moveSample, intensities);
 
@@ -112,7 +112,7 @@ void ViewController::showGameOverScreen(){
 	addstr("########################################");
 	refresh();
 	if (player){
-		float intensities[2] = {0.0,1.0};
+		float intensities[2] = {1.0,1.0};
 		player->play(gameOverSample, intensities);
 	}
 

@@ -153,6 +153,10 @@ void ViewController::input_thread_routine(){
 				gameController->userPressedUp();
 			}else if(c == 's'){
 				gameController->userPressedDown();
+			}else if(c == 'a'){
+				gameController->userPressedLeft();
+			}else if(c == 'd'){
+				gameController->userPressedRight();
 			}else if(c == 'q'){
 				gameController->terminate();
 			}

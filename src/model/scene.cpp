@@ -12,7 +12,7 @@ Scene::~Scene(){
 }
 
 unsigned char *Scene::serialize(int *n_bytes){
-	static unsigned char result[4096];
+	static unsigned char result[65536];
 	int offset = 0;
 	int n_enemies = enemyList.size();
 	//result[offset++] = enemyList.size();

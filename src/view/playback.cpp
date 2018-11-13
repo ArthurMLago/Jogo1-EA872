@@ -93,8 +93,8 @@ Player::Player() {
 	err = Pa_OpenStream( &stream,
 						 NULL,    //  [> No input. <]
 						 &outputParameters,
-						 46000,
-						 256,      // [> Frames per buffer. <]
+						 42000,
+						 128,      // [> Frames per buffer. <]
 						 paClipOff,// [> We won't output out of range samples so don't bother clipping them. <]
 						 &Player::PA_Callback,
 						 this );

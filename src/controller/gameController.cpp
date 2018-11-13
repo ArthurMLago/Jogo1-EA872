@@ -54,6 +54,9 @@ void GameController::update(){
 						Player *deleteme = currentScene->playerList[i];
 						currentScene->playerList.erase(currentScene->playerList.begin()+i);
 						delete deleteme;
+						Enemy *deleteme2 = currentScene->enemyList[j];
+						currentScene->enemyList.erase(currentScene->enemyList.begin() + j);
+						delete deleteme2;
 						viewController->playCollisionSound();
 						
 					}

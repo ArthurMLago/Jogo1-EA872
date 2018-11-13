@@ -2,14 +2,13 @@
 
 // Construtor: cria socket, cria thread.
 ClientController::ClientController(const char *Endereco, int porta){
-	int socket_fd;
     struct sockaddr_in target;
      // Cria um socket e retorna o descritor de arquivo
     socket_fd = socket(AF_INET, SOCK_STREAM, 0);
 
     target.sin_family = AF_INET;
   	target.sin_port = htons(porta);
-    inet_aton("Endereco", &(target.sin_addr));
+    inet_aton(Endereco, &(target.sin_addr));
     
     // Tenta estabelecer uma conexão com um socket
     while(connect(socket_fd, (struct sockaddr*)&target, sizeof(target)) != 0) {
@@ -17,17 +16,18 @@ ClientController::ClientController(const char *Endereco, int porta){
     	fprintf(stderr, "Erro ao conectar!\n");
     	sleep(1);
     }
-    // caso conectado, transmite mensagens ao socket
-  	send(socket_fd, "PING", 5, 0);
-	sleep(1);
 
 	// recebe o ID 4 bytes pela variavel serve_index através do socket 
 	int var_leitura_bit = recv(socket_fd, &server_index, 4, 0);
 	// Condicional que ve se foi passado 4 bytes para o socket
 	if(var_leitura_bit!=4){
-		var_leitura_bit = recv(socket_fd, &server_index, 4, 0);
-		fprintf(stderr, "Erro ao Ler!\n");
+		if (var_leitura_bit == -1){
+			fprintf(stderr, "Erro ao usar recv: %s\n", strerror(errno));
+		}else{
+			fprintf(stderr, "Quantidade de bytes lidos diferente do requisitado para obter id(%d != 4)!1\n", var_leitura_bit);
+		}
 	}
+	fprintf(stderr, "Server index: %d\n", server_index);
 	shouldTerminate_Aux = 0;
 	// Criar thread que escuta o estado da tela
 	// Recebe do servidor o estado da tela
@@ -50,18 +50,24 @@ void ClientController::receive_thread(){
 		// Se nao se recebeu os 4 bytes temos um tratamento de erro
 		if(numero_bytes != 4 ){
 			shouldTerminate_Aux = 1;
+			if (numero_bytes == -1){
+				fprintf(stderr, "Erro ao usar recv para obter numero_byts: %s\n", strerror(errno));
+			}else{
+				fprintf(stderr, "Quantidade de bytes lidos diferente do requisitado(%d != 4)!1\n", numero_bytes);
+			}
 			continue;
 		}
+		// Pega 4 bytes que e o tamanho do inteiro
+		int pular_bytes = *((int *)buffer);
 		// Incremento para percorre o buffer com os valores de ID
 		i = i + 4;
 		
-		// Pega 4 bytes que e o tamanho do inteiro
-		int pular_bytes = *((int *)buffer);
 		
 		numero_bytes = recv(socket_fd, buffer+i, pular_bytes, 0);
 		// Se nao se recebeu os pular_bytes bytes temos um tratamento de erro
 		if(numero_bytes != pular_bytes ){
 			shouldTerminate_Aux = 1;
+			fprintf(stderr, "Quantidade de bytes lidos diferente do requisitado!2\n");
 			continue;
 		}
 		i = i + pular_bytes;
@@ -71,6 +77,7 @@ void ClientController::receive_thread(){
 		// Se nao se recebeu os 4 bytes temos um tratamento de erro
 		if(numero_bytes != 4 ){
 			shouldTerminate_Aux = 1;
+			fprintf(stderr, "Quantidade de bytes lidos diferente do requisitado!3\n");
 			continue;
 		}
 		// Interpreta o numero de jogadores
@@ -82,6 +89,7 @@ void ClientController::receive_thread(){
 		// Se nao se recebeu os 4 bytes temos um tratamento de erro
 		if(numero_bytes != numero_jogadores*sizeof(Player)){
 			shouldTerminate_Aux = 1;
+			fprintf(stderr, "Quantidade de bytes lidos diferente do requisitado!4\n");
 			continue;
 		}
 		// Interpreta o numero de jogadores
@@ -93,6 +101,7 @@ void ClientController::receive_thread(){
 		// Se nao se recebeu os 4 bytes temos um tratamento de erro
 		if(numero_bytes != numero_inimigos*sizeof(Enemy)){
 			shouldTerminate_Aux = 1;
+			fprintf(stderr, "Quantidade de bytes lidos diferente do requisitado!5\n");
 			continue;
 		}
 		i = i + numero_inimigos*sizeof(Enemy);
@@ -102,7 +111,6 @@ void ClientController::receive_thread(){
 // Funcao que e chamada pelo view controle e envia para o servidor que w foi pressionado
 void ClientController::userPressedUp(){
 	int enviado;
-	shouldTerminate_Aux = 0;
 	enviado = send(socket_fd, "w", 1, 0);
 	if(enviado != 1){
 		shouldTerminate_Aux = 1;
@@ -112,7 +120,6 @@ void ClientController::userPressedUp(){
 // Funcao que e chamada pelo view controle e envia para o servidor que s foi pressionado
 void ClientController::userPressedDown(){
 	int enviado;
-	shouldTerminate_Aux = 0;
 	enviado = send(socket_fd, "s", 1, 0);
 	if(enviado != 1){
 		shouldTerminate_Aux = 1;
@@ -122,7 +129,6 @@ void ClientController::userPressedDown(){
 // Funcao que e chamada pelo view controle e envia para o servidor que a foi pressionado
 void ClientController::userPressedLeft(){
 	int enviado;
-	shouldTerminate_Aux = 0;
 	enviado = send(socket_fd, "a", 1, 0);
 	if(enviado != 1){
 		shouldTerminate_Aux = 1;
@@ -132,7 +138,6 @@ void ClientController::userPressedLeft(){
 // Funcao que e chamada pelo view controle e envia para o servidor que d foi pressionado
 void ClientController::userPressedRight(){
 	int enviado;
-	shouldTerminate_Aux = 0;
 	enviado = send(socket_fd, "d", 1, 0);
 	if(enviado != 1){
 		shouldTerminate_Aux = 1;
@@ -141,6 +146,7 @@ void ClientController::userPressedRight(){
 
 // Funcao que altera o valor do shouldTerminate_Aux
 void ClientController::terminate(){
+	fprintf(stderr, "terminate called\n");
 	shouldTerminate_Aux = 1;
 }
 

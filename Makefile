@@ -5,7 +5,7 @@ all: build build/game
 
 build/game: build/enemy.o build/player.o build/scene.o build/gameController.o build/serverController.o build/clientController.o build/viewController.o build/playback.o src/main.cpp
 	g++ $(CCFLAGS) build/enemy.o build/player.o build/scene.o build/gameController.o build/serverController.o build/clientController.o build/viewController.o build/playback.o src/main.cpp -o build/game libsndfile.a -lportaudio -lncurses -lpthread -lasound
-	#g++ $(CCFLAGS) build/enemy.o build/player.o build/scene.o build/gameController.o build/serverController.o build/viewController.o build/playback.o src/main.cpp -o build/game libsndfile.a libportaudio.a -lncurses -lpthread -lasound
+	#g++ $(CCFLAGS) build/enemy.o build/player.o build/scene.o build/gameController.o build/serverController.o build/clientController.o build/viewController.o build/playback.o src/main.cpp -o build/game libsndfile.a libportaudio.a -lncurses -lpthread -lasound
 
 build/enemy.o: src/model/enemy.cpp src/model/enemy.hpp
 	g++ $(CCFLAGS) src/model/enemy.cpp -c -o build/enemy.o

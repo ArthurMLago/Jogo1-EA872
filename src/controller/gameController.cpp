@@ -22,7 +22,7 @@ void GameController::update(){
 	float rand_v = (float)rand()/(float)(RAND_MAX/CREATION_OPPOSITION);
 	while(rand_v < dificuldade){
 		// cria mais bolas
-		Enemy* novo_enemy = new Enemy(0.5, val,0.05 + (0.3 * (float)(rand())/RAND_MAX));
+		Enemy* novo_enemy = new Enemy(-0.5, val,0.05 + (0.3 * (float)(rand())/RAND_MAX));
 		currentScene->enemyList.push_back(novo_enemy);
 		rand_v = (float)rand()/(float)(RAND_MAX/CREATION_OPPOSITION);
 	}
@@ -46,12 +46,33 @@ void GameController::update(){
 				//i = currentScene->enemyList.size();
 		//}
 	//}
+	for (int i = 0; i < currentScene->playerList.size(); i++){
+		for (int j = 0; j < currentScene->enemyList.size(); j++){
+			if (currentScene->playerList[i]->get_pos_y() == currentScene->enemyList[j]->get_pos_y()){
+				if (currentScene->playerList[i]->get_pos_x() > currentScene->enemyList[j]->get_pos_x() - 0.5){
+					if (currentScene->playerList[i]->get_pos_x() < currentScene->enemyList[j]->get_pos_x() + 0.5){
+						Player *deleteme = currentScene->playerList[i];
+						currentScene->playerList.erase(currentScene->playerList.begin()+i);
+						delete deleteme;
+						Enemy *deleteme2 = currentScene->enemyList[j];
+						currentScene->enemyList.erase(currentScene->enemyList.begin() + j);
+						delete deleteme2;
+						viewController->playCollisionSound();
+						
+					}
+				}
+			}
+		}
+	}
+	
+	
 	// Loop que verifica se os inimigos estao fora da tela
 	// Vale uma critica ao delete pois este deveria estar encapsulado em funcoes apropriadas dentro da classe Scene
 	for(int i = 0; i < currentScene->enemyList.size();i++){
 		if((currentScene->enemyList[i]->get_pos_x() > larg) || (currentScene->enemyList[i]->get_pos_y() > alt)){
-			delete currentScene->enemyList[i];
+			Enemy *deleteme = currentScene->enemyList[i];
 			currentScene->enemyList.erase(currentScene->enemyList.begin() + i);
+			delete deleteme;
 		}
 	}
 
@@ -67,6 +88,12 @@ void GameController::update(){
 */
 void GameController::setViewController(ViewController *pointer){
 	viewController = pointer;
+
+	int larg;
+	int alt;
+	viewController->getScreenDimension(&larg, &alt);
+	screenW = larg;
+	screenH = alt;
 }
 
 /*
@@ -97,8 +124,10 @@ void GameController::userPressedUp(int index){
 	int found = 0;
 	for (int i = 0; i < currentScene->playerList.size() && !found; i++){
 		if (currentScene->playerList[i]->get_socket_index() == index){
-			currentScene->playerList[i]->move(0,-1);
-            viewController->playMoveSound();
+			if (currentScene->playerList[i]->get_pos_y() - 1 >= 0){
+				currentScene->playerList[i]->move(0,-1);
+				viewController->playMoveSound();
+			}
 			found = 1;
 		}
 	}
@@ -112,8 +141,10 @@ void GameController::userPressedDown(int index){
 	int found = 0;
 	for (int i = 0; i < currentScene->playerList.size() && !found; i++){
 		if (currentScene->playerList[i]->get_socket_index() == index){
-			currentScene->playerList[i]->move(0,1);
-            viewController->playMoveSound();
+			if (currentScene->playerList[i]->get_pos_y() + 1 < screenH){
+				currentScene->playerList[i]->move(0,1);
+				viewController->playMoveSound();
+			}
 			found = 1;
 		}
 	}
@@ -124,8 +155,10 @@ void GameController::userPressedRight(int index){
 	int found = 0;
 	for (int i = 0; i < currentScene->playerList.size() && !found; i++){
 		if (currentScene->playerList[i]->get_socket_index() == index){
-			currentScene->playerList[i]->move(1,0);
-            viewController->playMoveSound();
+			if (currentScene->playerList[i]->get_pos_x() + 1 < screenW ){
+				currentScene->playerList[i]->move(1,0);
+				viewController->playMoveSound();
+			}
 			found = 1;
 		}
 	}
@@ -134,8 +167,10 @@ void GameController::userPressedLeft(int index){
 	int found = 0;
 	for (int i = 0; i < currentScene->playerList.size() && !found; i++){
 		if (currentScene->playerList[i]->get_socket_index() == index){
-			currentScene->playerList[i]->move(-1,0);
-            viewController->playMoveSound();
+			if (currentScene->playerList[i]->get_pos_x() - 1 > 0.1){
+				currentScene->playerList[i]->move(-1,0);
+				viewController->playMoveSound();
+			}
 			found = 1;
 		}
 	}
@@ -146,6 +181,7 @@ void GameController::playerQuit(int index){
 	int found = 0;
 	for (int i = 0; i < currentScene->playerList.size() && !found; i++){
 		if (currentScene->playerList[i]->get_socket_index() == index){
+			delete currentScene->playerList[i];
 			currentScene->playerList.erase(currentScene->playerList.begin()+i);
 			found = 1;
 		}
@@ -169,6 +205,6 @@ void GameController::playerConnected(int index){
 	int larg;
 	int alt;
 	viewController->getScreenDimension(&larg, &alt);
-	Player *newPlayer = new Player(rand() % (larg + 1), rand() % (alt + 1), index);
+	Player *newPlayer = new Player(rand() % larg, rand() % alt, index);
 	currentScene->playerList.push_back(newPlayer);
 }

@@ -4,6 +4,7 @@ Player::Player(float pos_x, int pos_y, int socket_index){
 	this->pos_x = pos_x;
 	this->pos_y = pos_y;
 	this->socket_index = socket_index;
+	this->dead = 0;
 
 }
 
@@ -27,3 +28,10 @@ void Player::move(float delta_x, int delta_y){
 	this->pos_y += delta_y;
 }
 
+//void Player::kill(){
+	//this->dead = 1;
+//}
+
+//int Player::is_dead(){
+	//return dead;
+//}

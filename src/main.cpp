@@ -3,106 +3,77 @@
 #include <thread>
 #include "controller/gameController.hpp"
 #include "controller/serverController.hpp"
+#include "controller/clientController.hpp"
 #include <signal.h>
 
 
-Scene *globalScene;
-GameController *gController;
 
-void remoteUpdater();
 
-int main(){
+int main(int argc, char **argv){
 	signal(SIGPIPE, SIG_IGN);
 	unsigned long int seed = time(NULL);
 	fprintf(stderr,"used seed: %ld\n", seed);
 	srand(seed);
 
-	GameController gameController;
-	ViewController viewController;
-	Scene currentScene;
-	ServerController serverController("127.0.0.1", 7823);
-
-	gController = &gameController;
-	globalScene = &currentScene;
-
-
-	viewController.setScene(&currentScene);
-	viewController.setGameController(&gameController);
-
-	gameController.setViewController(&viewController);
-	gameController.setScene(&currentScene);
-	
-	
-	int larg;
-	int alt;
-	viewController.getScreenDimension(&larg, &alt);
-
-	//currentScene.player = new Player(larg/2,alt/2);
-
-	std::thread first(remoteUpdater);
-
-	serverController.setGameController(&gameController);
-	serverController.setViewController(&viewController);
-	serverController.setCurrentScene(&currentScene);
-
-	serverController.waitForConnections();
-
-	while(!gameController.shouldTerminate()){
-	//while(1){
-		gameController.update();
-		viewController.drawScene();
-		std::this_thread::sleep_for(std::chrono::milliseconds(30));
+	fprintf(stderr, "argc = %d\n", argc);
+	for (int i = 0; i < argc; i++){
+		fprintf(stderr, "%s\n",argv[i]);
 	}
-	first.join();
 
-
-}
-
-void remoteUpdater(){
-	return;
-	int socket_fd, connection_fd;
-	struct sockaddr_in myself, client;
-	socklen_t client_size = (socklen_t)sizeof(client);
-	char input_buffer[50];
-
-	socket_fd = socket(AF_INET, SOCK_STREAM, 0);
-	fprintf(stderr, "Socket criado\n");
-
-	myself.sin_family = AF_INET;
-	myself.sin_port = htons(18258);
-	inet_aton("127.0.0.1", &(myself.sin_addr));
-	
-	fprintf(stderr, "Tentando abrir porta 18258\n");
-	while(bind(socket_fd, (struct sockaddr*)&myself, sizeof(myself)) == 0) {
-
-		fprintf(stderr, "Problemas ao abrir porta 18258\n");
-		sleep(1);
+	int server = 1;
+	if (argc >= 2 && !strcmp(argv[1], "client")){
+		fprintf(stderr, "gooing to client mode\n");
+		server = 0;
 	}
-	fcntl(socket_fd, F_SETFL, O_NONBLOCK);
-	fprintf(stderr, "Abri porta 3001!\n");
 
-	listen(socket_fd, 2);
-	fprintf(stderr, "Estou ouvindo na porta 18258!\n");
-	
-	while(!gController->shouldTerminate()){
-		fprintf(stderr, "Vou travar ate receber alguma coisa\n");
-		connection_fd = accept(socket_fd, NULL, NULL);
-		sleep(1);
+	if (server){
+		GameController gameController;
+		ViewController viewController;
+		Scene currentScene;
+		ServerController serverController("127.0.0.1", 7823);
 
-		if (connection_fd != -1){
+		viewController.setScene(&currentScene);
+		viewController.setGameController(&gameController);
 
-			int closed = 0;
-			while(!gController->shouldTerminate() && !closed){
-				int expected;
-				unsigned char *pointer;
-				pointer = globalScene->serialize(&expected);
-				int sent = send(connection_fd, pointer, expected, 0);
-				if (sent != expected)
-					closed = 1;
-				std::this_thread::sleep_for(std::chrono::milliseconds(40));
-			}
+		gameController.setViewController(&viewController);
+		gameController.setScene(&currentScene);
+
+		serverController.setGameController(&gameController);
+		serverController.setViewController(&viewController);
+		serverController.setCurrentScene(&currentScene);
+
+		serverController.waitForConnections();
+
+		while(!gameController.shouldTerminate()){
+			gameController.update();
+			viewController.drawScene();
+			std::this_thread::sleep_for(std::chrono::milliseconds(30));
+		}
+	}else{
+		ViewController viewController;
+		Scene currentScene;
+		const char *address;
+		int port;
+		if (argc >= 4){
+			address = argv[2];
+			port = atoi(argv[3]);
+		}else{
+			address = "127.0.0.1";
+			port = 7823;
+		}
+		ClientController clientController(address, port);
+
+		clientController.setScene(&currentScene);
+		clientController.setViewController(&viewController);
+
+		viewController.setGameController(&clientController);
+		viewController.setScene(&currentScene);
+
+		while(!clientController.shouldTerminate()){
+			viewController.drawScene();
+			std::this_thread::sleep_for(std::chrono::milliseconds(30));
 		}
 
-
 	}
+
 }

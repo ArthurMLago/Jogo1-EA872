@@ -146,6 +146,7 @@ void ViewController::drawScene(){
 
 void ViewController::input_thread_routine(){
 	char c;
+	timeout(1000);
 	while((gameController == NULL) || (!gameController->shouldTerminate())){
 		c = getch();
 		if (c != ERR){

@@ -1,7 +1,7 @@
 #include "clientController.hpp"
 
 // Construtor: cria socket, cria thread.
-ClientController:ClientController(const char *Endereco, int porta){
+ClientController::ClientController(const char *Endereco, int porta){
 	int socket_fd;
     struct sockaddr_in target;
      // Cria um socket e retorna o descritor de arquivo

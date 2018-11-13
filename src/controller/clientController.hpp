@@ -7,13 +7,19 @@
 #include <arpa/inet.h>
 #include <errno.h>
 #include <string.h>
+#include <thread>
+#include "../view/viewController.hpp"
+#include "../model/scene.hpp"
 
 class ClientController : public UserResponder{
 	private:
 		std::thread *recebe;
-		int socket;
+		int socket_fd;
 		int server_index;
 		int shouldTerminate_Aux;
+
+		ViewController *viewController;
+		Scene *currentScene;
 	public:
 		// COnstrutor: cria socket, cria thread.
 		ClientController(const char *Endereco, int porta);
@@ -26,5 +32,6 @@ class ClientController : public UserResponder{
 		int shouldTerminate();
 		void setViewController(ViewController *pointer);
 		void setScene(Scene *pointer);
+		void receive_thread();
 
 };

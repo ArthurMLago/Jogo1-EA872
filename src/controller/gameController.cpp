@@ -202,6 +202,6 @@ void GameController::playerConnected(int index){
 	int larg;
 	int alt;
 	viewController->getScreenDimension(&larg, &alt);
-	Player *newPlayer = new Player(rand() % (larg + 1), rand() % (alt + 1), index);
+	Player *newPlayer = new Player(rand() % larg, rand() % alt, index);
 	currentScene->playerList.push_back(newPlayer);
 }

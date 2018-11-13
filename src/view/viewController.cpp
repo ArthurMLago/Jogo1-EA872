@@ -149,7 +149,7 @@ void ViewController::input_thread_routine(){
 	timeout(1000);
 	while((gameController == NULL) || (!gameController->shouldTerminate())){
 		c = getch();
-		if (c != ERR){
+		if (c != ERR && gameController != NULL){
 			if (c == 'w'){
 				gameController->userPressedUp();
 			}else if(c == 's'){

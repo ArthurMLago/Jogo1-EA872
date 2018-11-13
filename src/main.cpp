@@ -52,7 +52,16 @@ int main(int argc, char **argv){
 	}else{
 		ViewController viewController;
 		Scene currentScene;
-		ClientController clientController("127.0.0.1", 7823);
+		const char *address;
+		int port;
+		if (argc >= 4){
+			address = argv[2];
+			port = atoi(argv[3]);
+		}else{
+			address = "127.0.0.1";
+			port = 7823;
+		}
+		ClientController clientController(address, port);
 
 		clientController.setScene(&currentScene);
 		clientController.setViewController(&viewController);

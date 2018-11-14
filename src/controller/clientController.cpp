@@ -60,7 +60,7 @@ void ClientController::receive_thread(){
 		}
 		// Pega 4 bytes que e o tamanho do inteiro
 		int pular_bytes = *((int *)buffer);
-		fprintf(stderr, "pular bytes: %d\n", pular_bytes);
+		//fprintf(stderr, "pular bytes: %d\n", pular_bytes);
 		// Incremento para percorre o buffer com os valores de ID
 		i = i + 4;
 		
@@ -73,6 +73,25 @@ void ClientController::receive_thread(){
 			continue;
 		}
 		i = i + pular_bytes;
+		
+		int j = 0;
+		while(j < pular_bytes){
+			if (buffer[4 + j] == 0x28){
+				switch(buffer[4 + j + 1]){
+					case 0:
+						viewController->playMoveSound();
+						break;
+					case 1:
+						viewController->playCollisionSound();
+
+						break;
+					default:
+						break;
+
+				}
+				j += 10;
+			}
+		}
 
 		// Le o numero de jogadores
 		numero_bytes = recv(socket_fd, buffer+i, 4, 0);

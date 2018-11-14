@@ -100,7 +100,7 @@ int ServerController::waitForConnections(){
 	action_buffer.resize(socket_list.size());
 	for (int i = 0; i < socket_list.size(); i++){
 		action_bytes_pending[i] = 0;
-		action_buffer[i] = (unsigned char*)malloc(64);
+		action_buffer[i] = (unsigned char*)malloc(4096);
 	}
 
 	recvThread = new std::thread(&ServerController::recvThreadRoutine, this);
@@ -205,4 +205,16 @@ void ServerController::setCurrentScene(Scene *scene){
 
 void ServerController::setViewController(ViewController *controller){
 	vController = controller;
+}
+
+
+void ServerController::sendSoundRequestToClients(unsigned char audio_id, float pos_x, float pos_y){
+	for (int i = 0; i < socket_list.size(); i++){
+		char id = 0x28;
+		memcpy(action_buffer[i] + action_bytes_pending[i]    , &id, 1);
+		memcpy(action_buffer[i] + action_bytes_pending[i] + 1, &audio_id, 1);
+		memcpy(action_buffer[i] + action_bytes_pending[i] + 2, &pos_x, 4);
+		memcpy(action_buffer[i] + action_bytes_pending[i] + 6, &pos_y, 4);
+		action_bytes_pending[i] += 10;
+	}
 }

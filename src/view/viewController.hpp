@@ -13,9 +13,11 @@
 #include "playback.hpp"
 #include "../model/scene.hpp"
 #include "../controller/iuserResponder.hpp"
+#include "../controller/serverController.hpp"
 
 
 class GameController;
+class ServerController;
 
 class ViewController{
 		Audio::Sample *moveSample;
@@ -26,6 +28,7 @@ class ViewController{
 
 		UserResponder *gameController;
 		Scene *currentScene;
+		ServerController *serverController;
 
 		std::thread *inputThread;
 
@@ -41,6 +44,7 @@ class ViewController{
 		
 		void setGameController(UserResponder *gameController);
 		void setScene(Scene *currentScene);
+		void setServerController(ServerController *srv);
 
 		void getScreenDimension(int *dst_Width, int *dst_Height);
 		

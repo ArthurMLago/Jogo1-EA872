@@ -3,9 +3,11 @@
 #include <math.h>
 #include "../model/scene.hpp"
 #include "../view/viewController.hpp"
+#include "serverController.hpp"
 #include "iuserResponder.hpp"
 
 class ViewController;
+class ServerController;
 
 class GameController : public UserResponder{
 	private:

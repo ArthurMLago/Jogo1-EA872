@@ -34,6 +34,7 @@ int main(int argc, char **argv){
 
 		viewController.setScene(&currentScene);
 		viewController.setGameController(&gameController);
+		viewController.setServerController(&serverController);
 
 		gameController.setViewController(&viewController);
 		gameController.setScene(&currentScene);

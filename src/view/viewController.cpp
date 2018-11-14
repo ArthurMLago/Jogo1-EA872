@@ -25,6 +25,7 @@ ViewController::ViewController(){
 	
 	gameController = NULL;
 	currentScene = NULL;
+	serverController = NULL;
 	// Criar thread que escuta por comandos:
 	inputThread = new std::thread(&ViewController::input_thread_routine, this);
 
@@ -47,6 +48,7 @@ ViewController::ViewController(int state){
 	
 	player = NULL;
 	gameController = NULL;
+	serverController = NULL;
 	currentScene = NULL;
 
 	if (state != 0){
@@ -80,6 +82,10 @@ void ViewController::setGameController(UserResponder *gameController){
 	this->gameController = gameController;
 }
 
+void ViewController::setServerController(ServerController *srv){
+	this->serverController = srv;
+}
+
 void ViewController::setScene(Scene *currentScene){
 	this->currentScene = currentScene;
 }
@@ -98,6 +104,9 @@ void ViewController::playMoveSound(){
 	float intensities[2] = {0.7,0.7};
 	if (player)
 		player->play(moveSample, intensities);
+	if (serverController)
+		serverController->sendSoundRequestToClients(0,0,0);
+
 
 }
 

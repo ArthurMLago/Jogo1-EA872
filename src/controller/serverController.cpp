@@ -96,7 +96,15 @@ int ServerController::waitForConnections(){
 	//}
 	fprintf(stderr, "Finishing connecting stage, %lu clients connected\n", socket_list.size());
 
+	action_bytes_pending.resize(socket_list.size());
+	action_buffer.resize(socket_list.size());
+	for (int i = 0; i < socket_list.size(); i++){
+		action_bytes_pending[i] = 0;
+		action_buffer[i] = (unsigned char*)malloc(64);
+	}
+
 	recvThread = new std::thread(&ServerController::recvThreadRoutine, this);
+	sendThread = new std::thread(&ServerController::sendThreadRoutine, this);
 
 	return socket_list.size();
 }
@@ -131,17 +139,58 @@ void ServerController::recvThreadRoutine(){
 }
 
 void ServerController::sendThreadRoutine(){
-	unsigned char **buffer_vet;
-	int *len_vet;
-	int *sent_vet;
+	std::vector<unsigned char*> buffer_vet(socket_list.size());
+	std::vector<int> len_vet(socket_list.size(), 0);
+	std::vector<int> sent_vet(socket_list.size(), 0);
+
+	//buffer_vet = (unsigned char **)malloc(socket_list.size() * sizeof(unsigned char *));
+	for (int i = 0; i < socket_list.size(); i++){
+		buffer_vet[i] = (unsigned char *)malloc(65536);
+		memcpy(buffer_vet[i], &(action_bytes_pending[i]), 4);
+		memcpy(buffer_vet[i] + 4, action_buffer[i], action_bytes_pending[i]);
+		len_vet[i] = 4 + action_bytes_pending[i];
+		action_bytes_pending[i] = 0;
+		len_vet[i] += currentScene->serialize(buffer_vet[i] + len_vet[i]);
+		sent_vet[i] = 0;
+
+	}
+	//len_vet = (int*)malloc(socket_list.size() * sizeof(int));
+	//sent_vet = (int*)malloc(socket_list.size() * sizeof(int));
 	while (!gController->shouldTerminate()){
 		for (int i = 0; i < socket_list.size(); i++){
-			int n_sent = send(socket_list[i], buffer_vet[i] + sent_vet[i], len_vet[i] - sent_vet[i], 0);
-			if (n_sent != len-vet[i] - sent_vet[i]){
-
+			if (socket_list[i] != -1){
+				int n_sent = send(socket_list[i], buffer_vet[i] + sent_vet[i], len_vet[i] - sent_vet[i], 0);
+				if ((n_sent == -1) || (n_sent == 0)){
+					if (n_sent == -1){
+						fprintf(stderr, "send for client %d returned -1, error: %d : %s\n", i, errno, strerror(errno));
+					}else{
+						fprintf(stderr, "send for client %d returned less bytes than expected %d\n", i, n_sent);
+						close(socket_list[i]);
+						socket_list[i] = -1;
+						gController->playerQuit(i);
+						// free it's buffer:
+						//free(buffer_vet[i]);
+						// delete it from all vectors:
+						//buffer_vet.erase(buffer_vet.begin() + i);
+						//len_vet.erase(len_vet.begin() + i);
+						//sent_vet.erase(sent_vet.begin() + i);
+					}
+				}else{
+					sent_vet[i] += n_sent;
+					if (sent_vet[i] >= len_vet[i]){
+						memcpy(buffer_vet[i], &(action_bytes_pending[i]), 4);
+						memcpy(buffer_vet[i] + 4, action_buffer[i], action_bytes_pending[i]);
+						len_vet[i] = 4 + action_bytes_pending[i];
+						action_bytes_pending[i] = 0;
+						len_vet[i] += currentScene->serialize(buffer_vet[i] + len_vet[i]);
+						sent_vet[i] = 0;
+					}
+				}
 			}
 
 		}
+		std::this_thread::sleep_for(std::chrono::milliseconds(30));
+
 	}
 	
 }

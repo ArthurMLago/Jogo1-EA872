@@ -76,7 +76,7 @@ Player::Player() {
 
 	err = Pa_Initialize();
 	if( err != paNoError ) {
-		std::cerr << "Error on Pa_Initialize()" << std::endl;
+		printf( "PortAudio error on Pa_Initialize: %d : %s\n", err, Pa_GetErrorText( err ) );
 		return;
 	}
 
@@ -100,7 +100,7 @@ Player::Player() {
 						 this );
 
 	if( err != paNoError ) {
-		std::cerr << "Error on Pa_OpenStream()" << std::endl;
+		fprintf(stderr, "PortAudio error on Pa_OpenStream: %d : %s\n", err, Pa_GetErrorText( err ) );
 		return;
 	}
 
@@ -116,7 +116,7 @@ Player::~Player() {
 
 	err = Pa_CloseStream( stream );
 	if( err != paNoError ) {
-		std::cerr << "Error on Pa_StopStream()" << std::endl;
+		printf( "PortAudio error on Pa_CloseStream: %d : %s\n", err, Pa_GetErrorText( err ) );
 		return;
 	}
 
@@ -140,7 +140,7 @@ int Player::play(Sample *audiosample, float *intensities){
     if (!playing){
         err = Pa_StartStream( stream );
         if( err != paNoError ) {
-            std::cerr << "Error on Pa_StartStream()" << std::endl;
+			printf( "PortAudio error on Pa_StartStream: %d : %s\n", err, Pa_GetErrorText( err ) );
 			sample_vector[index].samplePointer = NULL;
             return -1;
         }

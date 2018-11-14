@@ -27,6 +27,9 @@ class ServerController{
 		ViewController *vController;
 		Scene *currentScene;
 
+		std::vector<int> action_bytes_pending;
+		std::vector<unsigned char*> action_buffer;
+
 		std::thread *sendThread;
 		std::thread *recvThread;
 	public:

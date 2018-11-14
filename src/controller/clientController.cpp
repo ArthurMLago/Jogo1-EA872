@@ -45,6 +45,7 @@ void ClientController::receive_thread(){
 	int i, numero_bytes, numero_jogadores, numero_inimigos;
 	//
 	while(shouldTerminate_Aux == 0){
+		i = 0;
 		
 		numero_bytes = recv(socket_fd, buffer, 4, 0);
 		// Se nao se recebeu os 4 bytes temos um tratamento de erro
@@ -59,6 +60,7 @@ void ClientController::receive_thread(){
 		}
 		// Pega 4 bytes que e o tamanho do inteiro
 		int pular_bytes = *((int *)buffer);
+		fprintf(stderr, "pular bytes: %d\n", pular_bytes);
 		// Incremento para percorre o buffer com os valores de ID
 		i = i + 4;
 		
@@ -89,19 +91,29 @@ void ClientController::receive_thread(){
 		// Se nao se recebeu os 4 bytes temos um tratamento de erro
 		if(numero_bytes != numero_jogadores*sizeof(Player)){
 			shouldTerminate_Aux = 1;
-			fprintf(stderr, "Quantidade de bytes lidos diferente do requisitado!4\n");
+			fprintf(stderr, "Quantidade de bytes lidos diferente do requisitado (recebido %d, epserava %lu)!4\n", numero_bytes, numero_jogadores * sizeof(Player));
 			continue;
 		}
-		// Interpreta o numero de jogadores
-		int numero_inimigos = *((int *)(buffer+i));
 		i = i + numero_jogadores*sizeof(Player);
+
+
+		numero_bytes = recv(socket_fd, buffer+i, 4, 0);
+		// Se nao se recebeu os 4 bytes temos um tratamento de erro
+		if(numero_bytes != 4){
+			shouldTerminate_Aux = 1;
+			fprintf(stderr, "Quantidade de bytes lidos diferente do requisitado (recebido %d, epserava %lu)!5\n", numero_bytes, numero_jogadores * sizeof(Player));
+			continue;
+		}
+		// Interpreta o numero de inimigos
+		int numero_inimigos = *((int *)(buffer+i));
+		i += 4;
 
 		// Recebe os inimigos
 		numero_bytes = recv(socket_fd, buffer+i, numero_inimigos*sizeof(Enemy), 0);
 		// Se nao se recebeu os 4 bytes temos um tratamento de erro
 		if(numero_bytes != numero_inimigos*sizeof(Enemy)){
 			shouldTerminate_Aux = 1;
-			fprintf(stderr, "Quantidade de bytes lidos diferente do requisitado!5\n");
+			fprintf(stderr, "Quantidade de bytes lidos diferente do requisitado (recebido %d, epserava %lu)!6\n", numero_bytes, numero_inimigos * sizeof(Enemy));
 			continue;
 		}
 		i = i + numero_inimigos*sizeof(Enemy);

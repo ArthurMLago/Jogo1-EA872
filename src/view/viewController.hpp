@@ -35,11 +35,9 @@ class ViewController{
 		int screenW, screenH;
 		char keyBuffer;
 		int control;
-		int state;
 
 	public:
 		ViewController();
-		ViewController(int state);
 		~ViewController();
 		
 		void setGameController(UserResponder *gameController);
@@ -52,8 +50,6 @@ class ViewController{
 		void playMoveSound();
 		void showGameOverScreen();
 		void drawScene();
-
-		
 
 		void input_thread_routine();
 

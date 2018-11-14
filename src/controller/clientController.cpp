@@ -3,6 +3,7 @@
 // Construtor: cria socket, cria thread.
 ClientController::ClientController(const char *Endereco, int porta){
     struct sockaddr_in target;
+    shouldTerminate_Aux = 0;
      // Cria um socket e retorna o descritor de arquivo
     socket_fd = socket(AF_INET, SOCK_STREAM, 0);
 
@@ -11,7 +12,7 @@ ClientController::ClientController(const char *Endereco, int porta){
     inet_aton(Endereco, &(target.sin_addr));
     
     // Tenta estabelecer uma conexão com um socket
-    while(connect(socket_fd, (struct sockaddr*)&target, sizeof(target)) != 0) {
+    while(!shouldTerminate_Aux  && connect(socket_fd, (struct sockaddr*)&target, sizeof(target)) != 0) {
     	//Se nao conectar repete ate conectar
     	fprintf(stderr, "Erro ao conectar!\n");
     	sleep(1);
@@ -28,7 +29,6 @@ ClientController::ClientController(const char *Endereco, int porta){
 		}
 	}
 	fprintf(stderr, "Server index: %d\n", server_index);
-	shouldTerminate_Aux = 0;
 	// Criar thread que escuta o estado da tela
 	// Recebe do servidor o estado da tela
 	recebe = new std::thread(&ClientController::receive_thread, this);

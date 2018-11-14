@@ -4,6 +4,7 @@ Player::Player(float pos_x, int pos_y, int socket_index){
 	this->pos_x = pos_x;
 	this->pos_y = pos_y;
 	this->socket_index = socket_index;
+    this->color = 0;
 
 }
 

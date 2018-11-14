@@ -6,6 +6,7 @@ class Player {
 		int  pos_y;
 
 		int socket_index;
+        char color;
 
 	public:
 		Player(float pos_x, int pos_y, int socket_index);

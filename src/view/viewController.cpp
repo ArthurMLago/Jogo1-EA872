@@ -96,11 +96,15 @@ void ViewController::getScreenDimension(int *dst_Width, int* dst_Height){
 }
 
 void ViewController::playCollisionSound(){
+	float intensities[2] = {0.8,0.8};
+	if (player)
+		player->play(collideSample, intensities);
+	if (serverController)
+		serverController->sendSoundRequestToClients(1,0,0);
 
 }
 
 void ViewController::playMoveSound(){
-	//moveSample->position = 0;
 	float intensities[2] = {0.7,0.7};
 	if (player)
 		player->play(moveSample, intensities);
@@ -121,7 +125,7 @@ void ViewController::showGameOverScreen(){
 	addstr("########################################");
 	refresh();
 	if (player){
-		float intensities[2] = {1.0,1.0};
+		float intensities[2] = {0.7,0.7};
 		player->play(gameOverSample, intensities);
 	}
 

@@ -35,6 +35,9 @@ class GameController : public UserResponder{
 		void playerQuit(int index);
 		void terminate(); 
 		int shouldTerminate();
+
+		//tried to avoid one more reference, but it was necessary:
+		void setServerController(ServerController *srv);
 	
 };
 

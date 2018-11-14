@@ -125,8 +125,20 @@ void GameController::userPressedUp(int index){
 	for (int i = 0; i < currentScene->playerList.size() && !found; i++){
 		if (currentScene->playerList[i]->get_socket_index() == index){
 			if (currentScene->playerList[i]->get_pos_y() - 1 >= 0){
-				currentScene->playerList[i]->move(0,-1);
-				viewController->playMoveSound();
+				int will_collide = 0;
+				for (int j = 0; j < currentScene->playerList.size() && !will_collide; j++){
+					if (currentScene->playerList[i]->get_pos_y() - 1 == currentScene->playerList[j]->get_pos_y()){
+						if (currentScene->playerList[i]->get_pos_x() < currentScene->playerList[j]->get_pos_x() + 0.5){
+							if (currentScene->playerList[i]->get_pos_x() > currentScene->playerList[j]->get_pos_x() - 0.5){
+								will_collide = 1;
+							}
+						}
+					}
+				}
+				if (!will_collide){
+					currentScene->playerList[i]->move(0,-1);
+					viewController->playMoveSound();
+				}
 			}
 			found = 1;
 		}
@@ -142,8 +154,22 @@ void GameController::userPressedDown(int index){
 	for (int i = 0; i < currentScene->playerList.size() && !found; i++){
 		if (currentScene->playerList[i]->get_socket_index() == index){
 			if (currentScene->playerList[i]->get_pos_y() + 1 < screenH){
-				currentScene->playerList[i]->move(0,1);
-				viewController->playMoveSound();
+				int will_collide = 0;
+				for (int j = 0; j < currentScene->playerList.size() && !will_collide; j++){
+					if (currentScene->playerList[i]->get_pos_y() + 1 == currentScene->playerList[j]->get_pos_y()){
+						if (currentScene->playerList[i]->get_pos_x() < currentScene->playerList[j]->get_pos_x() + 0.5){
+							if (currentScene->playerList[i]->get_pos_x() > currentScene->playerList[j]->get_pos_x() - 0.5){
+								will_collide = 1;
+							}
+						}
+					}
+				}
+				if (!will_collide){
+					currentScene->playerList[i]->move(0,1);
+					viewController->playMoveSound();
+				}else{
+					// play error sound
+				}
 			}
 			found = 1;
 		}
@@ -156,8 +182,20 @@ void GameController::userPressedRight(int index){
 	for (int i = 0; i < currentScene->playerList.size() && !found; i++){
 		if (currentScene->playerList[i]->get_socket_index() == index){
 			if (currentScene->playerList[i]->get_pos_x() + 1 < screenW ){
-				currentScene->playerList[i]->move(1,0);
-				viewController->playMoveSound();
+				int will_collide = 0;
+				for (int j = 0; j < currentScene->playerList.size() && !will_collide; j++){
+					if (currentScene->playerList[i]->get_pos_y() == currentScene->playerList[j]->get_pos_y()){
+						if (currentScene->playerList[i]->get_pos_x() + 1 < currentScene->playerList[j]->get_pos_x() + 0.5){
+							if (currentScene->playerList[i]->get_pos_x() + 1 > currentScene->playerList[j]->get_pos_x() - 0.5){
+								will_collide = 1;
+							}
+						}
+					}
+				}
+				if (!will_collide){
+					currentScene->playerList[i]->move(1,0);
+					viewController->playMoveSound();
+				}
 			}
 			found = 1;
 		}
@@ -168,8 +206,20 @@ void GameController::userPressedLeft(int index){
 	for (int i = 0; i < currentScene->playerList.size() && !found; i++){
 		if (currentScene->playerList[i]->get_socket_index() == index){
 			if (currentScene->playerList[i]->get_pos_x() - 1 > 0.1){
-				currentScene->playerList[i]->move(-1,0);
-				viewController->playMoveSound();
+				int will_collide = 0;
+				for (int j = 0; j < currentScene->playerList.size() && !will_collide; j++){
+					if (currentScene->playerList[i]->get_pos_y() == currentScene->playerList[j]->get_pos_y()){
+						if (currentScene->playerList[i]->get_pos_x() - 1 < currentScene->playerList[j]->get_pos_x() + 0.5){
+							if (currentScene->playerList[i]->get_pos_x() - 1 > currentScene->playerList[j]->get_pos_x() - 0.5){
+								will_collide = 1;
+							}
+						}
+					}
+				}
+				if (!will_collide){
+					currentScene->playerList[i]->move(-1,0);
+					viewController->playMoveSound();
+				}
 			}
 			found = 1;
 		}

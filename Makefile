@@ -1,4 +1,4 @@
-CCFLAGS=-g3 -O0 -std=c++11 -I.
+CCFLAGS= -O3 -std=c++11 -I.
 
 all: build build/game
 	#./build/game

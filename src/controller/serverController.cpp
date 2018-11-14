@@ -219,3 +219,15 @@ void ServerController::sendSoundRequestToClients(unsigned char audio_id, float p
 		action_bytes_pending[i] += 10;
 	}
 }
+
+void ServerController::playMoveFailSoundAtClient(int index){
+    char id = 0x28;
+    char audio_id = 2;
+    float pos_x = 0;
+    float pos_y = 0;
+    memcpy(action_buffer[index] + action_bytes_pending[index]    , &id, 1);
+    memcpy(action_buffer[index] + action_bytes_pending[index] + 1, &audio_id, 1);
+    memcpy(action_buffer[index] + action_bytes_pending[index] + 2, &pos_x, 4);
+    memcpy(action_buffer[index] + action_bytes_pending[index] + 6, &pos_y, 4);
+    action_bytes_pending[index] += 10;
+}

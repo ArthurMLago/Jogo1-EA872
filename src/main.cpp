@@ -42,6 +42,7 @@ int main(int argc, char **argv){
 		serverController.setGameController(&gameController);
 		serverController.setViewController(&viewController);
 		serverController.setCurrentScene(&currentScene);
+        gameController.setServerController(&serverController);
 
 		serverController.waitForConnections();
 

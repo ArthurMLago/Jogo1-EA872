@@ -74,23 +74,28 @@ void ClientController::receive_thread(){
 		}
 		i = i + pular_bytes;
 		
-		int j = 0;
-		while(j < pular_bytes){
-			if (buffer[4 + j] == 0x28){
-				switch(buffer[4 + j + 1]){
+		int j = 4;
+		while(j < pular_bytes + 4){
+			if (buffer[j] == 0x28){
+				switch(buffer[j + 1]){
 					case 0:
 						viewController->playMoveSound();
 						break;
 					case 1:
 						viewController->playCollisionSound();
-
 						break;
+                    case 2:
+                        viewController->playMoveFailSound();
+                        break;
 					default:
 						break;
 
 				}
 				j += 10;
-			}
+			}else if(buffer[j] == 0x68){
+                //viewController->humiliatePlayer();
+                j += 1;
+            }
 		}
 
 		// Le o numero de jogadores

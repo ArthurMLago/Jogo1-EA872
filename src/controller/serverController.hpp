@@ -59,5 +59,6 @@ class ServerController{
 
 
 		void sendSoundRequestToClients(unsigned char audio_id, float pos_x, float pos_y);
+        void playMoveFailSoundAtClient(int index);
 };
 

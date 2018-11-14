@@ -23,6 +23,7 @@ class ViewController{
 		Audio::Sample *moveSample;
 		Audio::Sample *collideSample;
 		Audio::Sample *gameOverSample;
+		Audio::Sample *moveFailSample;
 
 		Audio::Player *player;
 
@@ -48,6 +49,7 @@ class ViewController{
 		
 		void playCollisionSound();
 		void playMoveSound();
+        void playMoveFailSound();
 		void showGameOverScreen();
 		void drawScene();
 

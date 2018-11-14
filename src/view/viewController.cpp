@@ -8,6 +8,7 @@ ViewController::ViewController(){
 	moveSample = new Audio::Sample("assets/move.wav");
 	collideSample = new Audio::Sample("assets/collision.wav");
 	gameOverSample = new Audio::Sample("assets/gameOver.wav");
+	moveFailSample = new Audio::Sample("assets/move_fail.wav");
 	
 	player = new Audio::Player();
 
@@ -74,6 +75,14 @@ void ViewController::playMoveSound(){
 	float intensities[2] = {0.7,0.7};
 	if (player)
 		player->play(moveSample, intensities);
+	if (serverController)
+		serverController->sendSoundRequestToClients(0,0,0);
+}
+
+void ViewController::playMoveFailSound(){
+	float intensities[2] = {0.7,0.7};
+	if (player)
+		player->play(moveFailSample, intensities);
 	if (serverController)
 		serverController->sendSoundRequestToClients(0,0,0);
 

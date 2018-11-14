@@ -96,6 +96,11 @@ void GameController::setViewController(ViewController *pointer){
 	screenH = alt;
 }
 
+
+void GameController::setServerController(ServerController *srv){
+    serverController = srv;
+}
+
 /*
 *Essa funcão atualiza a propriedade Setscene para o ponteiro passado.
 */
@@ -138,8 +143,12 @@ void GameController::userPressedUp(int index){
 				if (!will_collide){
 					currentScene->playerList[i]->move(0,-1);
 					viewController->playMoveSound();
-				}
-			}
+				}else{
+                    serverController->playMoveFailSoundAtClient(i);
+                }
+            }else{
+                serverController->playMoveFailSoundAtClient(i);
+            }
 			found = 1;
 		}
 	}
@@ -168,9 +177,11 @@ void GameController::userPressedDown(int index){
 					currentScene->playerList[i]->move(0,1);
 					viewController->playMoveSound();
 				}else{
-					// play error sound
-				}
-			}
+                    serverController->playMoveFailSoundAtClient(i);
+                }
+            }else{
+                serverController->playMoveFailSoundAtClient(i);
+            }
 			found = 1;
 		}
 	}
@@ -195,8 +206,12 @@ void GameController::userPressedRight(int index){
 				if (!will_collide){
 					currentScene->playerList[i]->move(1,0);
 					viewController->playMoveSound();
-				}
-			}
+				}else{
+                    serverController->playMoveFailSoundAtClient(i);
+                }
+            }else{
+                serverController->playMoveFailSoundAtClient(i);
+            }
 			found = 1;
 		}
 	}
@@ -219,8 +234,12 @@ void GameController::userPressedLeft(int index){
 				if (!will_collide){
 					currentScene->playerList[i]->move(-1,0);
 					viewController->playMoveSound();
-				}
-			}
+				}else{
+                    serverController->playMoveFailSoundAtClient(i);
+                }
+            }else{
+                serverController->playMoveFailSoundAtClient(i);
+            }
 			found = 1;
 		}
 	}

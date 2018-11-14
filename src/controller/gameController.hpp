@@ -13,6 +13,7 @@ class GameController : public UserResponder{
 	private:
 		Scene *currentScene;
 		ViewController *viewController;
+        ServerController *serverController;
 		int tempo = 0; //variável global que conta o tempo começa em 0
 		int shouldTerminate_var = 0; // jogo deve acabar
 

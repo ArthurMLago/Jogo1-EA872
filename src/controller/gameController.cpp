@@ -14,7 +14,7 @@ void GameController::update(){
 	viewController->getScreenDimension(&larg, &alt);
 	float val = alt*((float)(rand())/RAND_MAX);
 
-	float dificuldade = log(1.3 + tempo/60.0/20);
+	float dificuldade = 0.3 + log(1.3 + tempo/60.0/20);
 	if (dificuldade > 9)
 		dificuldade = 9;
 
